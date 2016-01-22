@@ -12,5 +12,7 @@
     <module>demo-logback-n0001-introduction</module>
     <module>demo-logback-n0002-architecture</module>
     <module>demo-logback-n0003-configuration</module>
+    <module>demo-logback-n0004-appenders</module>
+    <module>demo-logback-n0006-layouts</module>
   </modules>
 </project>
