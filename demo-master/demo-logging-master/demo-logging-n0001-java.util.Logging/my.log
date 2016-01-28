@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2016-01-28T16:01:27</date>
+  <millis>1453968087685</millis>
+  <sequence>8</sequence>
+  <logger>com.mycompany</logger>
+  <level>INFO</level>
+  <class>org.lys.demo.logging.n0001.java.util.Logging.AppTest</class>
+  <method>testMemoryHandler</method>
+  <thread>1</thread>
+  <message>日志记录9</message>
+</record>
+<record>
+  <date>2016-01-28T16:01:27</date>
+  <millis>1453968087685</millis>
+  <sequence>9</sequence>
+  <logger>com.mycompany</logger>
+  <level>INFO</level>
+  <class>org.lys.demo.logging.n0001.java.util.Logging.AppTest</class>
+  <method>testMemoryHandler</method>
+  <thread>1</thread>
+  <message>日志记录10</message>
+</record>
+<record>
+  <date>2016-01-28T16:01:27</date>
+  <millis>1453968087686</millis>
+  <sequence>10</sequence>
+  <logger>com.mycompany</logger>
+  <level>INFO</level>
+  <class>org.lys.demo.logging.n0001.java.util.Logging.AppTest</class>
+  <method>testMemoryHandler</method>
+  <thread>1</thread>
+  <message>日志记录11</message>
+</record>
+<record>
+  <date>2016-01-28T16:01:27</date>
+  <millis>1453968087687</millis>
+  <sequence>11</sequence>
+  <logger>com.mycompany</logger>
+  <level>INFO</level>
+  <class>org.lys.demo.logging.n0001.java.util.Logging.AppTest</class>
+  <method>testMemoryHandler</method>
+  <thread>1</thread>
+  <message>日志记录12</message>
+</record>
+<record>
+  <date>2016-01-28T16:01:27</date>
+  <millis>1453968087687</millis>
+  <sequence>12</sequence>
+  <logger>com.mycompany</logger>
+  <level>INFO</level>
+  <class>org.lys.demo.logging.n0001.java.util.Logging.AppTest</class>
+  <method>testMemoryHandler</method>
+  <thread>1</thread>
+  <message>日志记录13</message>
+</record>
+</log>

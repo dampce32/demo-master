@@ -6,5 +6,7 @@
   <packaging>pom</packaging>
   <modules>
   	<module>demo-logback-master</module>
+  	<module>demo-logging-master</module>
+  	<module>demo-jdk-master</module>
   </modules>
 </project>
