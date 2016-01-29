@@ -8,5 +8,6 @@
   	<module>demo-logback-master</module>
   	<module>demo-logging-master</module>
   	<module>demo-jdk-master</module>
+  	<module>demo-activiti-master</module>
   </modules>
 </project>
