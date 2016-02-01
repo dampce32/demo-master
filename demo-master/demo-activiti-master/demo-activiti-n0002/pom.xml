@@ -7,11 +7,8 @@
     <artifactId>demo-activiti-master</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>demo-activiti-n0001</artifactId>
-  <name>demo-activiti-n0001</name>
+  
+  <artifactId>demo-activiti-n0002</artifactId>
+  <name>demo-activiti-n0002</name>
   <url>http://maven.apache.org</url>
- 
-  
-  
-  
 </project>
