@@ -87,7 +87,6 @@ public class JavamailTest {
         store.close();
 	}
 	
-	
 	@Test
 	public void testListFoldersByIMAP() throws Exception {
 		Properties props = new Properties();
