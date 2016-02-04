@@ -1,15 +1,15 @@
 package org.lys.demo.javamail.n0001;
 
+import static org.junit.Assert.*;
+
 import java.util.Date;
 import java.util.Properties;
 
-import javax.mail.Address;
 import javax.mail.FetchProfile;
 import javax.mail.Flags;
 import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.NoSuchProviderException;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.Transport;
@@ -37,9 +37,14 @@ public class JavamailTest {
 			System.out.println("send failed, exception: " + mex);
 		}
 	}
-	
+	/**
+	 * @description: 列出邮箱中的文件夹(pop3)
+	 * @createTime: 2016年2月4日 上午8:42:27
+	 * @author: lys
+	 * @throws Exception
+	 */
 	@Test
-	public void testFolderByPop3() throws Exception {
+	public void testListFoldersByPop3() throws Exception {
 		Properties props = new Properties();
 		Session session = Session.getDefaultInstance(props);
 	
@@ -48,45 +53,25 @@ public class JavamailTest {
 		Store store = session.getStore(urlname);
 		store.connect();
 		
-		Folder folder = store.getFolder("INBOX");//pop3只能取INBOX文件夹
-        folder.open(Folder.READ_WRITE);
-        
-        int totalMessages = folder.getMessageCount();
-        int newMessages = folder.getNewMessageCount();
-        
-        
-        System.out.println("Total messages = " + totalMessages);
-        System.out.println("New messages = " + newMessages);
-        
-        folder.close(true);
-        store.close();
-
-	}
-	
-	@Test
-	public void testFolderByIMAP() throws Exception {
-		Properties props = new Properties();
-		Session session = Session.getDefaultInstance(props);
-	
-		URLName urlname = new URLName("imap","imap.163.com",143,null,"linyisong032@163.com","linyisong89625");
+		Folder rootFolder = store.getDefaultFolder();
+		Folder[] folders = rootFolder.list();
 		
-		Store store = session.getStore(urlname);
-		store.connect();
-		
-		Folder folder = store.getFolder("INBOX");
-        folder.open(Folder.READ_WRITE);
-        
-        int totalMessages = folder.getMessageCount();
-        int newMessages = folder.getNewMessageCount();
-        
-        
-        System.out.println("Total messages = " + totalMessages);
-        System.out.println("New messages = " + newMessages);
-        
-        folder.close(true);
+		for (Folder folder : folders) {
+			System.out.println(folder.getName());
+			folder.close(true);
+		}
+		assertEquals(folders.length,1);
+		/*
+		 *INBOX pop3只能取INBOX文件夹
+		 */
         store.close();
 	}
-	
+	/**
+	 * @description: 列出文件夹（imap）
+	 * @createTime: 2016年2月4日 上午8:45:33
+	 * @author: lys
+	 * @throws Exception
+	 */
 	@Test
 	public void testListFoldersByIMAP() throws Exception {
 		Properties props = new Properties();
@@ -102,57 +87,85 @@ public class JavamailTest {
 		
 		for (Folder folder : folders) {
 			System.out.println(folder.getName());
+			folder.close(true);
 		}
+		/*
+		 *  INBOX
+			草稿箱
+			已发送
+			已删除
+			垃圾邮件
+			病毒文件夹
+			广告邮件
+			订阅邮件
+			1
+			11
+		 */
+		assertTrue(folders.length>1);
         store.close();
 	}
 	
+	@Test
+	public void testFolderProperties() throws Exception {
+		Properties props = new Properties();
+		Session session = Session.getDefaultInstance(props);
 	
+		URLName urlname = new URLName("imap","imap.163.com",143,null,"linyisong032@163.com","linyisong89625");
+		
+		Store store = session.getStore(urlname);
+		store.connect();
+		
+		Folder rootFolder = store.getDefaultFolder();
+		Folder[] folders = rootFolder.list();
+		
+		for (Folder folder : folders) {
+	        folder.open(Folder.READ_WRITE);
+	        String name = folder.getName();
+	        int totalMessages = folder.getMessageCount();
+	        int newMessages = folder.getNewMessageCount();
+	        System.out.printf("Folder=%s,Total messages=%s,New messages=%s\n", name, totalMessages, newMessages);
+	        folder.close(true);
+		}
+        store.close();
+	}
 	
 	@Test
 	public void testShowMsg() throws Exception {
 
 		Properties props = new Properties();
-		props.put("mail.smtp.host", "smtp.163.com");
-		props.put("mail.pop3.host", "pop.163.com");
-		Session session = Session.getInstance(props, null);
+		Session session = Session.getDefaultInstance(props);
 	
-		URLName urlname = new URLName("pop3","pop.163.com",110,null,"linyisong032@163.com","lys89625");
+		URLName urlname = new URLName("imap","imap.163.com",143,null,"linyisong032@163.com","linyisong89625");
 		
 		Store store = session.getStore(urlname);
 		store.connect();
 		
-//		Store store = session.getStore("pop3");
-//		store.connect("pop.163.com", 110, "linyisong032@163.com", "lys89625");
-//		
+		Folder rootFolder = store.getDefaultFolder();
+		Folder[] folders = rootFolder.list();
 		
-		Folder folder = store.getFolder("INBOX");
-        folder.open(Folder.READ_WRITE);
-        
-        int totalMessages = folder.getMessageCount();
-        int newMessages = folder.getNewMessageCount();
-        
-        System.out.println("Total messages = " + totalMessages);
-        System.out.println("New messages = " + newMessages);
-        
-		Message[] msgs = folder.getMessages();
-		
-		// Use a suitable FetchProfile
-		FetchProfile fp = new FetchProfile();
-		fp.add(FetchProfile.Item.ENVELOPE);
-//		fp.add(FetchProfile.Item.FLAGS);
-		fp.add("X-mailer");
-		folder.fetch(msgs, fp);
-				
-		for (int i = 0; i < msgs.length; i++) {
-		    System.out.println("--------------------------");
-		    System.out.println("MESSAGE #" + msgs[i].getMessageNumber()+ ":");
-		    dumpEnvelope(msgs[i]);
-		    // dumpPart(msgs[i]);
+		for (Folder folder : folders) {
+	        folder.open(Folder.READ_WRITE);
+	        String name = folder.getName();
+	        int totalMessages = folder.getMessageCount();
+	        int newMessages = folder.getNewMessageCount();
+	        System.out.printf("Folder=%s,Total messages=%s,New messages=%s\n", name, totalMessages, newMessages);
+	        
+	        Message[] msgs = folder.getMessages();
+			
+			// Use a suitable FetchProfile
+			FetchProfile fp = new FetchProfile();
+			fp.add(FetchProfile.Item.ENVELOPE);
+//			fp.add(FetchProfile.Item.FLAGS);
+			fp.add("X-mailer");
+			folder.fetch(msgs, fp);
+					
+			for (int i = 0; i < msgs.length; i++) {
+			    System.out.println("MESSAGE #" + msgs[i].getMessageNumber()+ ":");
+			    dumpEnvelope(msgs[i]);
+			}
+	        folder.close(true);
 		}
-		
-		
-
-		
+        store.close();
 	}
 	
 	public static void dumpEnvelope(Message m) throws Exception {

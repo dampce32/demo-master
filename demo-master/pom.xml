@@ -10,5 +10,6 @@
   	<module>demo-jdk-master</module>
   	<module>demo-activiti-master</module>
   	<module>demo-javamail-master</module>
+  	<module>demo-jsontools-master</module>
   </modules>
 </project>
