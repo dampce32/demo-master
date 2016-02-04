@@ -1,12 +1,11 @@
 package org.lys.demo.javamail.n0001;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 import java.util.Properties;
 
-import javax.mail.FetchProfile;
-import javax.mail.Flags;
 import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -14,6 +13,8 @@ import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.Transport;
 import javax.mail.URLName;
+import javax.mail.event.StoreEvent;
+import javax.mail.event.StoreListener;
 import javax.mail.internet.MimeMessage;
 
 import org.junit.Test;
@@ -128,10 +129,14 @@ public class JavamailTest {
 		}
         store.close();
 	}
-	
+	/**
+	 * @description: 展示邮件信息
+	 * @createTime: 2016年2月4日 上午9:24:17
+	 * @author: lys
+	 * @throws Exception
+	 */
 	@Test
 	public void testShowMsg() throws Exception {
-
 		Properties props = new Properties();
 		Session session = Session.getDefaultInstance(props);
 	
@@ -140,97 +145,61 @@ public class JavamailTest {
 		Store store = session.getStore(urlname);
 		store.connect();
 		
-		Folder rootFolder = store.getDefaultFolder();
-		Folder[] folders = rootFolder.list();
-		
-		for (Folder folder : folders) {
-	        folder.open(Folder.READ_WRITE);
-	        String name = folder.getName();
-	        int totalMessages = folder.getMessageCount();
-	        int newMessages = folder.getNewMessageCount();
-	        System.out.printf("Folder=%s,Total messages=%s,New messages=%s\n", name, totalMessages, newMessages);
-	        
-	        Message[] msgs = folder.getMessages();
-			
-			// Use a suitable FetchProfile
-			FetchProfile fp = new FetchProfile();
-			fp.add(FetchProfile.Item.ENVELOPE);
-//			fp.add(FetchProfile.Item.FLAGS);
-			fp.add("X-mailer");
-			folder.fetch(msgs, fp);
-					
-			for (int i = 0; i < msgs.length; i++) {
-			    System.out.println("MESSAGE #" + msgs[i].getMessageNumber()+ ":");
-			    dumpEnvelope(msgs[i]);
-			}
-	        folder.close(true);
+		Folder folder = store.getFolder("1");
+        folder.open(Folder.READ_WRITE);
+        String name = folder.getFullName();
+        int totalMessages = folder.getMessageCount();
+        int newMessages = folder.getNewMessageCount();
+        System.out.printf("Folder=%s,Total messages=%s,New messages=%s\n", name, totalMessages, newMessages);
+        
+        Message[] msgs = folder.getMessages();
+		for (int i = 0; i < msgs.length; i++) {
+		    System.out.println("MESSAGE #" + msgs[i].getMessageNumber()+ ":");
+		    Message m = msgs[i];
+		    dumpEnvelope(m);
+		    System.out.println("IsContainAttch:"+JavaMailUtil.isContainAttch(m));
+		    StringBuffer bodytext = new StringBuffer();
+		    JavaMailUtil.getMailContent(m,bodytext);
+		    System.out.println("Content:"+bodytext.toString());
+		    
+		    JavaMailUtil.saveAttchMent(m);
 		}
+        folder.close(true);
+        store.close();
+	}
+	
+	@Test
+	public void testStoreListener() throws Exception {
+		Properties props = new Properties();
+		Session session = Session.getDefaultInstance(props);
+	
+		URLName urlname = new URLName("imap","imap.163.com",143,null,"linyisong032@163.com","linyisong89625");
+		
+		Store store = session.getStore(urlname);
+		store.addStoreListener(new StoreListener() {
+			public void notification(StoreEvent e) {
+			    String s;
+			    if (e.getMessageType() == StoreEvent.ALERT)
+				s = "ALERT: ";
+			    else
+				s = "NOTICE: ";
+			    System.out.println(s + e.getMessage());
+			}
+	    });
+		store.connect();
         store.close();
 	}
 	
 	public static void dumpEnvelope(Message m) throws Exception {
-		// SUBJECT
-		pr("SUBJECT: " + m.getSubject());
-		
-		// FLAGS
-		Flags flags = m.getFlags();
-		StringBuffer sb = new StringBuffer();
-		Flags.Flag[] sf = flags.getSystemFlags(); // get the system flags
-
-		boolean first = true;
-		for (int i = 0; i < sf.length; i++) {
-		    String s;
-		    Flags.Flag f = sf[i];
-		    if (f == Flags.Flag.ANSWERED)
-			s = "\\Answered";
-		    else if (f == Flags.Flag.DELETED)
-			s = "\\Deleted";
-		    else if (f == Flags.Flag.DRAFT)
-			s = "\\Draft";
-		    else if (f == Flags.Flag.FLAGGED)
-			s = "\\Flagged";
-		    else if (f == Flags.Flag.RECENT)
-			s = "\\Recent";
-		    else if (f == Flags.Flag.SEEN)
-			s = "\\Seen";
-		    else
-			continue;	// skip it
-		    if (first)
-			first = false;
-		    else
-			sb.append(' ');
-		    sb.append(s);
-		}
-
-		String[] uf = flags.getUserFlags(); // get the user flag strings
-		for (int i = 0; i < uf.length; i++) {
-		    if (first)
-			first = false;
-		    else
-			sb.append(' ');
-		    sb.append(uf[i]);
-		}
-		pr("FLAGS: " + sb.toString());
-		
-		
-		// X-MAILER
-		String[] hdrs = m.getHeader("X-Mailer");
-		if (hdrs != null)
-		    pr("X-Mailer: " + hdrs[0]);
-		else
-		    pr("X-Mailer NOT available");
+		System.out.println("FROM: " + JavaMailUtil.getFrom(m));
+		System.out.println("REPLY TO: " + JavaMailUtil.getReplyTo(m));
+		System.out.println("TO: " + JavaMailUtil.getTo(m));
+		System.out.println("CC: " + JavaMailUtil.getCC(m));
+		System.out.println("BCC: " + JavaMailUtil.getBCC(m));
+		System.out.println("SUBJECT: " + m.getSubject());
+		System.out.println("SendDate: " +JavaMailUtil.getSendDate(m));
+		System.out.println("system flags: " +JavaMailUtil.getSystemFlags(m));
+		System.out.println("user flag: " +JavaMailUtil.getUserFlags(m));
+		System.out.println("X-MAILER: " +JavaMailUtil.getMailer(m));
 	}
-	
-	static String indentStr = "                                               ";
-    static int level = 0;
-
-    /**
-     * Print a, possibly indented, string.
-     */
-    public static void pr(String s) {
-	    System.out.print(indentStr.substring(0, level * 2));
-	    System.out.println(s);
-    }
-	
-
 }
