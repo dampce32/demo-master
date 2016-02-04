@@ -1,0 +1,180 @@
+package org.lys.demo.javamail.n0001;
+
+import java.io.IOException;
+import java.util.Date;
+import java.util.Properties;
+
+import javax.mail.Authenticator;
+import javax.mail.Folder;
+import javax.mail.FolderClosedException;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Store;
+import javax.mail.Transport;
+import javax.mail.URLName;
+import javax.mail.event.MessageCountAdapter;
+import javax.mail.event.MessageCountEvent;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+
+import org.junit.Test;
+
+import com.sun.mail.imap.IMAPFolder;
+
+public class SampleTest {
+	/**
+	 * @description: 测试将一个文件夹下的邮件，复制到另一个文件夹下
+	 * @createTime: 2016年2月4日 下午3:26:21
+	 * @author: lys
+	 * @throws Exception
+	 */
+	@Test
+	public void testCopier() throws Exception {
+		String src = "1";	// source folder
+	    String dest = "2";	// dest folder
+		
+		Properties props = new Properties();
+		Session session = Session.getDefaultInstance(props);
+		URLName urlname = new URLName("imap","imap.163.com",143,null,"linyisong032@163.com","linyisong89625");
+		Store store = session.getStore(urlname);
+		store.connect();
+		JavaMailUtil.copyMsg(src, dest, store);
+	}
+	
+	@Test
+	public void testFolderlist() throws Exception {
+		Properties props = new Properties();
+		Session session = Session.getDefaultInstance(props);
+		session.setDebug(true);
+		URLName urlname = new URLName("imap","imap.163.com",143,null,"linyisong032@163.com","linyisong89625");
+		Store store = session.getStore(urlname);
+		store.connect();
+		
+		Folder rf = store.getDefaultFolder();
+//		JavaMailUtil.dumpFolder(rf, true, "");
+		
+		if ((rf.getType() & Folder.HOLDS_FOLDERS) != 0) {
+		    Folder[] f = rf.list("1");
+		    for (int i = 0; i < f.length; i++){
+		    	JavaMailUtil.dumpFolder(f[i], true, "    ");
+		    }
+		}
+	}
+	
+	@Test
+	public void testMonitor() throws Exception {
+		Properties props = new Properties();
+		Session session = Session.getDefaultInstance(props);
+		URLName urlname = new URLName("imap","imap.163.com",143,null,"linyisong032@163.com","linyisong89625");
+		Store store = session.getStore(urlname);
+		store.connect();
+		
+		Folder folder = store.getFolder("1");
+		folder.open(Folder.READ_WRITE);
+		
+		folder.addMessageCountListener(new MessageCountAdapter() {
+			
+			public void messagesAdded(MessageCountEvent ev) {
+				Message[] msgs = ev.getMessages();
+				System.out.println("Got " + msgs.length + " new messages");
+
+				// Just dump out the new messages
+				for (int i = 0; i < msgs.length; i++) {
+					try {
+						System.out.println("-----");
+						System.out.println("Message " + msgs[i].getMessageNumber() + ":");
+						msgs[i].writeTo(System.out);
+					} catch (IOException ioex) {
+						ioex.printStackTrace();
+					} catch (MessagingException mex) {
+						mex.printStackTrace();
+					}
+				}
+			}
+		});
+		int freq = 100;
+		boolean supportsIdle = false;
+		try {
+			if (folder instanceof IMAPFolder) {
+				IMAPFolder f = (IMAPFolder) folder;
+				f.idle();
+				supportsIdle = true;
+			}
+		} catch (FolderClosedException fex) {
+			throw fex;
+		} catch (MessagingException mex) {
+			supportsIdle = false;
+		}
+		for (;;) {
+			if (supportsIdle && folder instanceof IMAPFolder) {
+				IMAPFolder f = (IMAPFolder) folder;
+				f.idle();
+				System.out.println("IDLE done");
+			} else {
+				Thread.sleep(freq); // sleep for freq milliseconds
+
+				// This is to force the IMAP server to send us
+				// EXISTS notifications.
+				folder.getMessageCount();
+			}
+		}
+	}
+	
+	@Test
+	public void testMover() throws Exception {
+		String src = "1";	// source folder
+	    String dest = "2";	// dest folder
+		
+		Properties props = new Properties();
+		Session session = Session.getDefaultInstance(props);
+		URLName urlname = new URLName("smtp","smtp.163.com",143,null,"linyisong032@163.com","linyisong89625");
+		Store store = session.getStore(urlname);
+		store.connect();
+		JavaMailUtil.moveMsg(src, dest, store);
+	}
+	
+	@Test
+	public void testMsgMultiSendSample() throws Exception {
+		Properties props = new Properties();
+		props.put("mail.smtp.host", "smtp.163.com");
+		Session session = Session.getInstance(props);
+		
+		String msgText1 = "This is a message body.\nHere's line two.";
+		String msgText2 = "This is the text in the message attachment.";
+		String to = "lys@csit.cc";
+		String from = "linyisong032@163.com";
+
+		MimeMessage msg = new MimeMessage(session);
+		msg.setFrom(new InternetAddress(from));
+		InternetAddress[] address = { new InternetAddress(to) };
+		msg.setRecipients(Message.RecipientType.TO, address);
+		msg.setSubject("JavaMail APIs Multipart Test");
+		msg.setSentDate(new Date());
+
+		// create and fill the first message part
+		MimeBodyPart mbp1 = new MimeBodyPart();
+		mbp1.setText(msgText1);
+
+		// create and fill the second message part
+		MimeBodyPart mbp2 = new MimeBodyPart();
+		// Use setText(text, charset), to show it off !
+		mbp2.setText(msgText2);
+
+		// create the Multipart and its parts to it
+		Multipart mp = new MimeMultipart();
+//		mp.addBodyPart(mbp1);
+		mp.addBodyPart(mbp2);
+
+		// add the Multipart to the message
+		msg.setContent(mp);
+
+		// send the message
+		Transport.send(msg, "linyisong032@163.com", "linyisong89625");
+	}
+	
+}

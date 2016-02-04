@@ -14,28 +14,9 @@
   
    <dependencies>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.10</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>com.sun.mail</groupId>
       <artifactId>javax.mail</artifactId>
       <version>1.5.5</version>
     </dependency>
-    
-    
   </dependencies>
-  <repositories>
-      <!-- 推荐使用oschina仓库 -->
-      <repository>
-          <id>nexus-osc</id>
-          <url>http://maven.oschina.net/content/groups/public/</url>
-      </repository>
-      <repository>
-          <id>nexus-osc-thirdparty</id>
-          <url>http://maven.oschina.net/content/repositories/thirdparty/</url>
-      </repository>
-  </repositories>
 </project>

@@ -33,7 +33,7 @@ public class JavamailTest {
 			msg.setSubject("JavaMail hello world example");
 			msg.setSentDate(new Date());
 			msg.setText("Hello, world!\n");
-			Transport.send(msg, "linyisong032@163.com", "lys89625");
+			Transport.send(msg, "linyisong032@163.com", "linyisong89625");
 		} catch (MessagingException mex) {
 			System.out.println("send failed, exception: " + mex);
 		}

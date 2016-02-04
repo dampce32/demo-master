@@ -12,12 +12,16 @@ import java.util.Date;
 
 import javax.mail.BodyPart;
 import javax.mail.Flags;
+import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Part;
+import javax.mail.Store;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeUtility;
+
+import com.sun.mail.imap.IMAPFolder;
 /**
  * @description: JavaMail 工具类
  * @copyright: 福建骏华信息有限公司 (c)2016</p>
@@ -414,4 +418,102 @@ public class JavaMailUtil {
         }
        
     }
+	/**
+	 * @description: 复制文件夹下的邮件
+	 * @createTime: 2016年2月4日 下午3:54:50
+	 * @author: lys
+	 * @param src
+	 * @param dest
+	 * @param store
+	 * @throws MessagingException
+	 */
+	public static void copyMsg(String src, String dest, Store store) throws MessagingException {
+		Folder folder = store.getFolder(src);
+		folder.open(Folder.READ_WRITE);
+		if (folder.getMessageCount() == 0) {
+			folder.close(false);
+			store.close();
+			return;
+	    }
+		
+		Folder dfolder = store.getFolder(dest);
+		if (!dfolder.exists()){
+			dfolder.create(Folder.HOLDS_MESSAGES);
+		}
+		Message[] msgs = folder.getMessages();
+		folder.copyMessages(msgs, dfolder);
+		folder.close(false);
+        store.close();
+	}
+	
+	/**
+	 * @description: 导出文件夹的目录以及文件夹信息
+	 * @createTime: 2016年2月4日 下午3:56:19
+	 * @author: lys
+	 * @param folder
+	 * @param recurse
+	 * @param tab
+	 * @throws Exception
+	 */
+	public static void dumpFolder(Folder folder, boolean recurse, String tab)
+			throws Exception {
+		System.out.println(tab + "Name:      " + folder.getName());
+		System.out.println(tab + "Full Name: " + folder.getFullName());
+		System.out.println(tab + "URL:       " + folder.getURLName());
+		
+		if (!folder.isSubscribed())
+			System.out.println(tab + "Not Subscribed");
+		
+		if ((folder.getType() & Folder.HOLDS_MESSAGES) != 0) {
+			if (folder.hasNewMessages())
+				System.out.println(tab + "Has New Messages");
+			System.out.println(tab + "Total Messages:  " + folder.getMessageCount());
+			System.out.println(tab + "New Messages:    " + folder.getNewMessageCount());
+			System.out.println(tab + "Unread Messages: " + folder.getUnreadMessageCount());
+		}
+		if ((folder.getType() & Folder.HOLDS_FOLDERS) != 0)
+			System.out.println(tab + "Is Directory");
+		
+		/*
+		 * Demonstrate use of IMAP folder attributes returned by the IMAP LIST
+		 * response.
+		 */
+		if (folder instanceof IMAPFolder) {
+			IMAPFolder f = (IMAPFolder) folder;
+			String[] attrs = f.getAttributes();
+			if (attrs != null && attrs.length > 0) {
+				System.out.println(tab + "IMAP Attributes:");
+				for (int i = 0; i < attrs.length; i++)
+					System.out.println(tab + "    " + attrs[i]);
+			}
+		}
+		System.out.println();
+		if ((folder.getType() & Folder.HOLDS_FOLDERS) != 0) {
+			if (recurse) {
+				Folder[] f = folder.list();
+				for (int i = 0; i < f.length; i++)
+					dumpFolder(f[i], recurse, tab + "    ");
+			}
+		}
+	}
+	
+	public static void moveMsg(String src, String dest, Store store) throws MessagingException {
+		Folder folder = store.getFolder(src);
+		folder.open(Folder.READ_WRITE);
+		if (folder.getMessageCount() == 0) {
+			folder.close(false);
+			store.close();
+			return;
+	    }
+		
+		Folder dfolder = store.getFolder(dest);
+		if (!dfolder.exists()){
+			dfolder.create(Folder.HOLDS_MESSAGES);
+		}
+		Message[] msgs = folder.getMessages();
+		folder.copyMessages(msgs, dfolder);
+		folder.setFlags(msgs, new Flags(Flags.Flag.DELETED), true);
+		folder.close(false);
+        store.close();
+	}
 }
