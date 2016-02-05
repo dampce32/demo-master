@@ -35,8 +35,11 @@ package org.lys.demo.javamail.n0001;
  *
  * @author	Christopher Cotton
  */
-
-import javax.mail.*;
+import javax.mail.Folder;
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Store;
+import javax.mail.URLName;
 
 /**
  * copier will copy a specified number of messages from one folder
@@ -51,7 +54,6 @@ import javax.mail.*;
 public class copier {
 
     public static void main(String argv[]) {
-	boolean debug = false;	// change to get more errors
 	
 	if (argv.length != 5) {
 	    System.out.println( "usage: copier <urlname> <src folder>" +

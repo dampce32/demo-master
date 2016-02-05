@@ -4,13 +4,11 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Properties;
 
-import javax.mail.Authenticator;
 import javax.mail.Folder;
 import javax.mail.FolderClosedException;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
-import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.Transport;
@@ -21,6 +19,11 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.search.AndTerm;
+import javax.mail.search.FromStringTerm;
+import javax.mail.search.HeaderTerm;
+import javax.mail.search.SearchTerm;
+import javax.mail.search.SubjectTerm;
 
 import org.junit.Test;
 
@@ -40,7 +43,7 @@ public class SampleTest {
 		
 		Properties props = new Properties();
 		Session session = Session.getDefaultInstance(props);
-		URLName urlname = new URLName("imap","imap.163.com",143,null,"linyisong032@163.com","linyisong89625");
+		URLName urlname = new URLName("imap","imap.163.com",143,null,"csit_java_test@163.com","csitJava32");
 		Store store = session.getStore(urlname);
 		store.connect();
 		JavaMailUtil.copyMsg(src, dest, store);
@@ -51,7 +54,7 @@ public class SampleTest {
 		Properties props = new Properties();
 		Session session = Session.getDefaultInstance(props);
 		session.setDebug(true);
-		URLName urlname = new URLName("imap","imap.163.com",143,null,"linyisong032@163.com","linyisong89625");
+		URLName urlname = new URLName("imap","imap.163.com",143,null,"csit_java_test@163.com","csitJava32");
 		Store store = session.getStore(urlname);
 		store.connect();
 		
@@ -70,7 +73,7 @@ public class SampleTest {
 	public void testMonitor() throws Exception {
 		Properties props = new Properties();
 		Session session = Session.getDefaultInstance(props);
-		URLName urlname = new URLName("imap","imap.163.com",143,null,"linyisong032@163.com","linyisong89625");
+		URLName urlname = new URLName("imap","imap.163.com",143,null,"csit_java_test@163.com","csitJava32");
 		Store store = session.getStore(urlname);
 		store.connect();
 		
@@ -132,7 +135,7 @@ public class SampleTest {
 		
 		Properties props = new Properties();
 		Session session = Session.getDefaultInstance(props);
-		URLName urlname = new URLName("smtp","smtp.163.com",143,null,"linyisong032@163.com","linyisong89625");
+		URLName urlname = new URLName("smtp","smtp.163.com",143,null,"csit_java_test@163.com","csitJava32");
 		Store store = session.getStore(urlname);
 		store.connect();
 		JavaMailUtil.moveMsg(src, dest, store);
@@ -147,7 +150,7 @@ public class SampleTest {
 		String msgText1 = "This is a message body.\nHere's line two.";
 		String msgText2 = "This is the text in the message attachment.";
 		String to = "lys@csit.cc";
-		String from = "linyisong032@163.com";
+		String from = "csit_java_test@163.com";
 
 		MimeMessage msg = new MimeMessage(session);
 		msg.setFrom(new InternetAddress(from));
@@ -163,18 +166,159 @@ public class SampleTest {
 		// create and fill the second message part
 		MimeBodyPart mbp2 = new MimeBodyPart();
 		// Use setText(text, charset), to show it off !
-		mbp2.setText(msgText2);
+		mbp2.setText(msgText2, "us-ascii");
 
 		// create the Multipart and its parts to it
 		Multipart mp = new MimeMultipart();
-//		mp.addBodyPart(mbp1);
+		mp.addBodyPart(mbp1);
 		mp.addBodyPart(mbp2);
 
 		// add the Multipart to the message
 		msg.setContent(mp);
 
 		// send the message
-		Transport.send(msg, "linyisong032@163.com", "linyisong89625");
+		Transport.send(msg, "csit_java_test@163.com", "csitJava32");
+	}
+	
+	@Test
+	public void testMsgsend() throws Exception {
+		Properties props = new Properties();
+		props.put("mail.smtp.host", "smtp.163.com");
+		Session session = Session.getInstance(props);
+		
+		String text = "This is a message body.\nHere's line two.";
+		String to = "lys@csit.cc";
+		String from = "csit_java_test@163.com";
+		String mailer = "msgsend";
+		
+		MimeMessage msg = new MimeMessage(session);
+		msg.setFrom(new InternetAddress(from));
+		InternetAddress[] address = { new InternetAddress(to) };
+		
+		msg.setRecipients(Message.RecipientType.TO, address);
+		msg.setSubject("JavaMail APIs Msgsend ");
+		msg.setSentDate(new Date());
+		msg.setHeader("X-Mailer", mailer);
+		
+		MimeBodyPart mbp1 = new MimeBodyPart();
+		mbp1.setText(text);
+		//添加附件1
+		MimeBodyPart mbp2 = new MimeBodyPart();
+		mbp2.attachFile("C:/Users/linys/Pictures/Jellyfish.jpg");
+		//添加附件2
+		MimeBodyPart mbp3 = new MimeBodyPart();
+		mbp3.attachFile("C:/Users/linys/Pictures/Koala.jpg");
+		
+		MimeMultipart mp = new MimeMultipart();
+		mp.addBodyPart(mbp1);
+		mp.addBodyPart(mbp2);
+		mp.addBodyPart(mbp3);
+		msg.setContent(mp);
+		
+		// send the message
+		Transport.send(msg, "csit_java_test@163.com", "csitJava32");
+	
+		//把信息添加到文件夾"1"中
+		URLName urlname = new URLName("imap","imap.163.com",143,null,"csit_java_test@163.com","csitJava32");
+		Store store = session.getStore(urlname);
+		store.connect();
+		
+		Folder folder = store.getFolder("1");
+		if (!folder.exists()){
+			folder.create(Folder.HOLDS_MESSAGES);
+		}
+
+		Message[] msgs = new Message[1];
+		msgs[0] = msg;
+		folder.appendMessages(msgs);
+
+		System.out.println("Mail was recorded successfully.");
+	}
+	
+	@Test
+	public void testNamespace() throws Exception {
+		Properties props = new Properties();
+		props.put("mail.smtp.host", "smtp.163.com");
+		Session session = Session.getInstance(props);
+		//把信息添加到文件夾"1"中
+		URLName urlname = new URLName("imap","imap.163.com",143,null,"csit_java_test@163.com","csitJava32");
+		Store store = session.getStore(urlname);
+		store.connect();
+		
+		namespace.printFolders("Personal", store.getPersonalNamespaces());
+		namespace.printFolders("User \"" + "other" + "\"", store.getUserNamespaces("other"));
+		namespace.printFolders("Shared", store.getSharedNamespaces());
+	}
+	/**
+	 * @description: 文件夾迁移
+	 * @createTime: 2016年2月5日 下午2:24:47
+	 * @author: lys
+	 * @throws Exception
+	 */
+	@Test
+	public void testPopulate() throws Exception {
+		Properties props = new Properties();
+		props.put("mail.smtp.host", "smtp.163.com");
+		Session session = Session.getInstance(props);
+		
+		URLName srcURLName = new URLName("imap","imap.163.com",143,null,"linyisong032@163.com","linyisong89625");
+		Store  srcStore = session.getStore(srcURLName);
+		srcStore.connect();
+		Folder srcFolder = srcStore.getFolder("1");
+		
+		URLName dstURLName = new URLName("imap","imap.163.com",143,null,"csit_java_test@163.com","csitJava32");
+		Store  dstStore = session.getStore(dstURLName);
+		dstStore.connect();
+		Folder dstFolder = dstStore.getFolder("1");
+		
+		populate.copy(srcFolder, dstFolder);
+		
+		srcFolder.getStore().close();
+		dstFolder.getStore().close();
+	}
+	
+	@SuppressWarnings("unused")
+	@Test
+	public void testSearch() throws Exception {
+		Properties props = new Properties();
+		props.put("mail.smtp.host", "smtp.163.com");
+		Session session = Session.getInstance(props);
+		session.setDebug(false);
+		
+		URLName urlName = new URLName("imap","imap.163.com",143,null,"csit_java_test@163.com","csitJava32");//不能查询
+//		URLName urlName = new URLName("pop3","pop.163.com",110,null,"csit_java_test@163.com","csitJava32");//可查询
+		Store  store = session.getStore(urlName);
+		store.connect();
+		Folder  folder = store.getFolder("INBOX");
+		folder.open(Folder.READ_ONLY);
+
+		Message[] allMsgs =folder.getMessages();
+		System.out.println("FOUND " + allMsgs.length + " MESSAGES");
+
+		
+		SearchTerm term =  new HeaderTerm("X-Tmail-Type","IMAP");;
+		
+		String subject = "javamail";
+		String from = null;
+		
+
+		if (subject != null){
+			term = new SubjectTerm(subject);
+		}
+		
+		if (from != null) {
+			FromStringTerm fromTerm = new FromStringTerm(from);
+			if (term != null) {
+					term = new AndTerm(term, fromTerm);
+			} else{
+				term = fromTerm;
+			}
+		}
+		
+		Message[] msgs = folder.search(term);
+		System.out.println("FOUND " + msgs.length + " MESSAGES");
+		
+		store.close();
 	}
 	
 }
