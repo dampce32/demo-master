@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Properties;
 
+import javax.activation.DataHandler;
 import javax.mail.Folder;
 import javax.mail.FolderClosedException;
 import javax.mail.Message;
@@ -24,6 +25,7 @@ import javax.mail.search.FromStringTerm;
 import javax.mail.search.HeaderTerm;
 import javax.mail.search.SearchTerm;
 import javax.mail.search.SubjectTerm;
+import javax.mail.util.ByteArrayDataSource;
 
 import org.junit.Test;
 
@@ -285,8 +287,8 @@ public class SampleTest {
 		Session session = Session.getInstance(props);
 		session.setDebug(false);
 		
-		URLName urlName = new URLName("imap","imap.163.com",143,null,"csit_java_test@163.com","csitJava32");//不能查询
-//		URLName urlName = new URLName("pop3","pop.163.com",110,null,"csit_java_test@163.com","csitJava32");//可查询
+//		URLName urlName = new URLName("imap","imap.163.com",143,null,"csit_java_test@163.com","csitJava32");//不能查询
+		URLName urlName = new URLName("pop3","pop.163.com",110,null,"csit_java_test@163.com","csitJava32");//可查询
 		Store  store = session.getStore(urlName);
 		store.connect();
 		Folder  folder = store.getFolder("INBOX");
@@ -319,6 +321,111 @@ public class SampleTest {
 		System.out.println("FOUND " + msgs.length + " MESSAGES");
 		
 		store.close();
+	}
+	/**
+	 * @description: 添加附件
+	 * @createTime: 2016年2月14日 上午10:07:13
+	 * @author: lys
+	 * @throws Exception
+	 */
+	@Test
+	public void testSendfile() throws Exception{
+		Properties props = new Properties();
+		props.put("mail.smtp.host", "smtp.163.com");
+		Session session = Session.getInstance(props);
+
+		String msgText1 = "Sending a file.\n";
+		String subject = "Sending a file";
+
+		String to = "lys@csit.cc";
+		String from = "csit_java_test@163.com";
+
+		// create a message
+		MimeMessage msg = new MimeMessage(session);
+		msg.setFrom(new InternetAddress(from));
+		InternetAddress[] address = { new InternetAddress(to) };
+		msg.setRecipients(Message.RecipientType.TO, address);
+		msg.setSubject(subject);
+
+		// create and fill the first message part
+		MimeBodyPart mbp1 = new MimeBodyPart();
+		mbp1.setText(msgText1);
+
+		// create the second message part
+		MimeBodyPart mbp2 = new MimeBodyPart();
+
+		// attach the file to the message
+		mbp2.attachFile("C:/Users/linys/Pictures/Koala.jpg");
+
+		/*
+		 * Use the following approach instead of the above line if you want to
+		 * control the MIME type of the attached file. Normally you should never
+		 * need to do this.
+		 *
+		 * FileDataSource fds = new FileDataSource(filename) { public String
+		 * getContentType() { return "application/octet-stream"; } };
+		 * mbp2.setDataHandler(new DataHandler(fds));
+		 * mbp2.setFileName(fds.getName());
+		 */
+
+		// create the Multipart and add its parts to it
+		Multipart mp = new MimeMultipart();
+		mp.addBodyPart(mbp1);
+		mp.addBodyPart(mbp2);
+
+		// add the Multipart to the message
+		msg.setContent(mp);
+
+		// set the Date: header
+		msg.setSentDate(new Date());
+
+		// send the message
+		Transport.send(msg, "csit_java_test@163.com", "csitJava32");
+	}
+	@Test
+	public void testSendhtml() throws Exception{
+		Properties props = new Properties();
+		props.put("mail.smtp.host", "smtp.163.com");
+		Session session = Session.getInstance(props);
+		
+		String msgText1 = "Sending a html.\n";
+		String subject = "Sending a html";
+		
+		String to = "lys@csit.cc";
+		String from = "csit_java_test@163.com";
+		String mailer = "sendhtml";
+		
+		// create a message
+		MimeMessage msg = new MimeMessage(session);
+		msg.setFrom(new InternetAddress(from));
+		InternetAddress[] address = { new InternetAddress(to) };
+		msg.setRecipients(Message.RecipientType.TO, address);
+		msg.setSubject(subject);
+		msg.setHeader("X-Mailer", mailer);
+		msg.setSentDate(new Date());
+		
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append("<HTML>\n");
+		sb.append("<HEAD>\n");
+		sb.append("<TITLE>\n");
+		sb.append(subject + "\n");
+		sb.append("</TITLE>\n");
+		sb.append("</HEAD>\n");
+
+		sb.append("<BODY>\n");
+		sb.append("<H1>" + subject + "</H1>" + "\n");
+	    sb.append(msgText1);
+	    sb.append("\n");
+
+		sb.append("</BODY>\n");
+		sb.append("</HTML>\n");
+
+		msg.setDataHandler(new DataHandler(new ByteArrayDataSource(sb.toString(), "text/html")));
+		
+		// send the message
+		Transport.send(msg, "csit_java_test@163.com", "csitJava32");
+		System.out.println("\nMail was sent successfully.");
 	}
 	
 }
