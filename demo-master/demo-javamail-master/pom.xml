@@ -10,6 +10,7 @@
   <packaging>pom</packaging>
   <modules>
     <module>demo-javamail-n0001</module>
+    <module>demo-javamail-n0002</module>
   </modules>
   
    <dependencies>
