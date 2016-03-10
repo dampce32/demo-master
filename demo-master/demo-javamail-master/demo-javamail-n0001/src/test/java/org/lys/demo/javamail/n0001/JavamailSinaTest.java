@@ -31,7 +31,6 @@ import org.junit.Test;
 public class JavamailSinaTest {
 	
 	public static String MAIL_SMTP_HOST="smtp.sina.com";
-	public static Integer MAIL_SMTP_PORT=465;
 	public static String MAIL_USER="linyisong032@sina.com";
 	public static String MAIL_PASSWORD="lys89625";
 	
