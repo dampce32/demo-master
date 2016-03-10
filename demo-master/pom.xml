@@ -11,6 +11,7 @@
   	<module>demo-activiti-master</module>
   	<module>demo-javamail-master</module>
   	<module>demo-jsontools-master</module>
+  	<module>demo-ehcache-master</module>
   </modules>
   <dependencies>
     <dependency>
