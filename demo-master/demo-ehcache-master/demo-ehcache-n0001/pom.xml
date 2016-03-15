@@ -12,5 +12,16 @@
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<ehcache.core.version>2.6.9</ehcache.core.version>
   </properties>
+  
+  <dependencies>
+		<!-- encache 相关jar包 -->
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache-core</artifactId>
+			<version>${ehcache.core.version}</version>
+		</dependency>
+	</dependencies>
+	
 </project>
