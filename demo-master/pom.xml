@@ -12,6 +12,7 @@
   	<module>demo-javamail-master</module>
   	<module>demo-jsontools-master</module>
   	<module>demo-ehcache-master</module>
+  	<module>demo-jgroups-master</module>
   </modules>
   <dependencies>
     <dependency>
