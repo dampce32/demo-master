@@ -72,7 +72,6 @@ public class SimpleChat {
 		BufferedReader br = null;
 		try {
 			br = new BufferedReader(new InputStreamReader(System.in));
-
 			while (true) {
 				System.out.print(">");
 				System.out.flush();
