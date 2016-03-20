@@ -13,6 +13,7 @@
   	<module>demo-jsontools-master</module>
   	<module>demo-ehcache-master</module>
   	<module>demo-jgroups-master</module>
+  	<module>demo-fontEnd-master</module>
   </modules>
   <dependencies>
     <dependency>
