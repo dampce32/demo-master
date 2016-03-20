@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
+
 import org.jgroups.JChannel;
 import org.jgroups.Message;
 import org.jgroups.ReceiverAdapter;
@@ -11,13 +12,13 @@ import org.jgroups.View;
 import org.jgroups.util.Util;
 
 public class SimpleChat {
-	//
+
 	private JChannel channel;
 	private List<String> state = new LinkedList<String>();
 	private String userName = System.getProperty("user.name");
 
 	public void start() throws Exception {
-		//
+
 		channel = new JChannel();
 		channel.setReceiver(new ReceiverAdapter() {
 			public void receive(Message msg) {
@@ -31,6 +32,7 @@ public class SimpleChat {
 				System.out.println("view accepted: " + view);
 			}
 
+			@SuppressWarnings("unused")
 			public byte[] getState() {
 				synchronized (state) {
 					try {
@@ -42,7 +44,7 @@ public class SimpleChat {
 				}
 			}
 
-			@SuppressWarnings("unchecked")
+			@SuppressWarnings({ "unused", "unchecked" })
 			public void setState(byte[] new_state) {
 				try {
 					List<String> list = (List<String>) Util.objectFromByteBuffer(new_state);
