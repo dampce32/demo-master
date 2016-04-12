@@ -10,5 +10,6 @@
   <packaging>pom</packaging>
   <modules>
     <module>demo-thread-n0001</module>
+    <module>demo-thread-n0002</module>
   </modules>
 </project>
