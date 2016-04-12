@@ -1,0 +1,3 @@
+该项目演示java中Thread与Runnable类实现线程
+详细参看
+Actor类
