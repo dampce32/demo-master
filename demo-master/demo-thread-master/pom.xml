@@ -11,5 +11,6 @@
   <modules>
     <module>demo-thread-n0001</module>
     <module>demo-thread-n0002</module>
+    <module>demo-thread-n0003</module>
   </modules>
 </project>
