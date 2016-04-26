@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.Date;
 import java.util.Properties;
 
+import javax.mail.Address;
 import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.Session;
@@ -18,6 +19,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.MimeUtility;
 
 import org.junit.Test;
 
@@ -154,6 +156,62 @@ public class AppTest {
 		 */
 		assertTrue(folders.length>1);
         store.close();
+	}
+	
+	@Test
+	public void testInternetAddress() throws Exception {
+		InternetAddress[] a = InternetAddress.parse("林以宋<lys@csit.cc>,578935829 <578935829@qq.com>,linyisong032<linyisong032@163.com>");
+//		for (InternetAddress internetAddress : a) {
+//			System.out.println(internetAddress.getPersonal());
+//			System.out.println(internetAddress.getAddress());
+//		}
+		
+		Properties props = new Properties();
+		props.put("mail.smtp.host", MAIL_SMTP_HOST);
+		Session session = Session.getInstance(props);
+		MimeMessage msg = new MimeMessage(session);
+		msg.setRecipients(Message.RecipientType.TO, a);
+		
+		Address[] b = msg.getRecipients(Message.RecipientType.TO);
+		for (Address address : b) {
+			InternetAddress c = (InternetAddress)address;
+			System.out.println(c.getPersonal());
+			System.out.println(c.getAddress());
+		}
+		
+		InternetAddress internetAddress = new InternetAddress(MimeUtility.encodeText("578935829 <578935829@qq.com>"));
+	}
+	
+	@Test
+	public void testInternetAddressArray() throws Exception {
+		String source = "林以宋<lys@csit.cc>,578935829 <578935829@qq.com>,linyisong032<linyisong032@163.com>";
+		InternetAddress[] a = InternetAddress.parse(source);
+//		for (InternetAddress internetAddress : a) {
+//			System.out.println(internetAddress.getPersonal());
+//			System.out.println(internetAddress.getAddress());
+//		}
+		
+		Properties props = new Properties();
+		props.put("mail.smtp.host", MAIL_SMTP_HOST);
+		Session session = Session.getInstance(props);
+		MimeMessage msg = new MimeMessage(session);
+		msg.setRecipients(Message.RecipientType.TO, a);
+		
+		Address[] b = msg.getRecipients(Message.RecipientType.TO);
+		for (Address address : b) {
+			InternetAddress c = (InternetAddress)address;
+//			System.out.println(c.getPersonal());
+//			System.out.println(c.getAddress());
+		}
+		InternetAddress internetAddress = new InternetAddress("林以宋<lys@csit.cc>");
+		internetAddress.setPersonal(MimeUtility.encodeText(internetAddress.getPersonal()));
+		
+		String str = MimeUtility.encodeText("林以宋");
+		System.out.println(str);
+		System.out.println(MimeUtility.decodeText(str));
+		
+		System.out.println(internetAddress.getPersonal());
+		System.out.println(MimeUtility.decodeText(internetAddress.getPersonal()) );
 	}
 	
 }
