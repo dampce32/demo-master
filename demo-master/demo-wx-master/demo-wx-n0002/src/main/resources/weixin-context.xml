@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+			http://www.springframework.org/schema/tx 
+			http://www.springframework.org/schema/tx/spring-tx-3.0.xsd 
+			http://www.springframework.org/schema/jee 
+			http://www.springframework.org/schema/jee/spring-jee-3.0.xsd 
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-3.0.xsd
+			http://www.springframework.org/schema/aop
+            http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+            http://www.springframework.org/schema/mvc   
+        	http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd" 
+	default-lazy-init="false">
+	<context:component-scan base-package="com.health.weixinserver" />
+	<context:annotation-config />
+	<!-- 链接数据库 -->
+	<import resource="classpath*:serviceContext-datasource.xml"/>
+	<!-- 任务定时器 -->
+	<import resource="classpath*:weixin-scheduling.xml"/>
+	
+     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="placeholderPrefix">
+			<value>@[</value>
+		</property>
+		<property name="placeholderSuffix">
+			<value>]</value>
+		</property>
+		<property name="location">
+			<value>classpath:runtime.properties</value>
+		</property>
+		<property name="ignoreResourceNotFound">
+			<value>false</value>
+		</property>
+	</bean>
+	
+	<!-- 定义受环境影响易变的变量 -->
+	<bean id="weiXinSessionFactory" class="com.intensoft.dao.hibernate.AnnotationSessionFactoryBeanExt">
+        <property name="dataSource" ref="weibank.dataSource" />
+        <property name="namingStrategy">
+            <bean class="org.hibernate.cfg.ImprovedNamingStrategy" />
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.InformixDialect</prop>
+                <prop key="hibernate.show_sql">false</prop>
+                <prop key="hibernate.cache.use_query_cache">false</prop>
+                <prop key="hibernate.use_outer_join">false</prop>
+				<prop key="hibernate.query.substitutions">true=1, false=0</prop>                
+            </props>
+        </property>
+        <property name="entityPackages">
+            <list>
+                <value>com.health.weixinserver</value><!--微信系统相关 --> 
+            </list>
+        </property>
+    </bean>
+    
+      	<!-- 事务配置 -->
+    <bean id="weixinTransactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="weiXinSessionFactory" />
+    </bean>
+	<!-- 使用annotation定义事务 -->
+    <tx:annotation-driven transaction-manager="weixinTransactionManager" />
+    <tx:advice id="weixinadvice" transaction-manager="weixinTransactionManager"/>
+
+ 
+	
+</beans>
