@@ -10,5 +10,6 @@
   <packaging>pom</packaging>
   <modules>
     <module>demo-wx-n0001</module>
+    <module>demo-wx-n0002</module>
   </modules>
 </project>
