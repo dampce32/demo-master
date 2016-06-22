@@ -4,11 +4,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.FileOutputStream;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
 
 import javax.mail.Folder;
 import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.NoSuchProviderException;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.Transport;
@@ -19,6 +22,11 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.search.AndTerm;
+import javax.mail.search.ComparisonTerm;
+import javax.mail.search.ReceivedDateTerm;
+import javax.mail.search.SearchTerm;
+import javax.mail.search.SentDateTerm;
 
 import org.junit.Test;
 
@@ -182,6 +190,119 @@ public class JavamailTest {
 		 */
 		assertTrue(folders.length>1);
         store.close();
+	}
+	
+	
+	/**
+	 * @description: 企业邮箱
+	 * @createTime: 2016年6月21日 上午11:06:07
+	 * @author: lys
+	 * @throws Exception
+	 */
+	@Test
+	public void testSearchExmailFoldersByIMAP() {
+		try {
+			Properties props = new Properties();
+//		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");//ssl必须加这个
+//		props.put("mail.imap.ssl.enable", "true");
+			Session session = Session.getDefaultInstance(props);
+			session.setDebug(true);
+			
+			URLName urlname = new URLName("imap",MAIL_IMAP_HOST,MAIL_IMAP_PORT,null,MAIL_USER,MAIL_PASSWORD);
+			
+			Store store = session.getStore(urlname);
+			store.connect();
+			
+			javax.mail.Folder folder = store.getFolder("Sent Messages");
+			folder.open(javax.mail.Folder.READ_WRITE);
+			
+//		String name = folder.getName();
+//        int totalMessages = folder.getMessageCount();
+//        int newMessages = folder.getNewMessageCount();
+//        System.out.printf("Folder=%s,Total messages=%s,New messages=%s\n", name, totalMessages, newMessages);
+			
+//    	Calendar c = Calendar.getInstance();
+//		c.set(Calendar.HOUR, 0);
+//		c.set(Calendar.MINUTE, 0);
+//		c.set(Calendar.SECOND, 0);
+//		c.set(Calendar.MILLISECOND, 0);
+//		c.set(Calendar.AM_PM, Calendar.AM);
+//        
+//		SentDateTerm startDateTerm = 
+//       		 new SentDateTerm(ComparisonTerm.GE, c.getTime());
+//        
+//        c.add(Calendar.DATE, 1);	// next day
+//       		
+//        SentDateTerm endDateTerm = 
+//       		 new SentDateTerm(ComparisonTerm.LT, c.getTime());
+//       	
+//       	SearchTerm dateTerm = new AndTerm(startDateTerm, endDateTerm);
+			
+			
+			
+			Calendar c = Calendar.getInstance();
+			c.set(Calendar.HOUR, 0);
+			c.set(Calendar.MINUTE, 0);
+			c.set(Calendar.SECOND, 0);
+			c.set(Calendar.MILLISECOND, 0);
+			c.set(Calendar.AM_PM, Calendar.AM);
+			
+			ReceivedDateTerm startDateTerm = 
+				 new ReceivedDateTerm(ComparisonTerm.GE, c.getTime());
+			
+			c.add(Calendar.DATE, 1);	// next day
+				
+			ReceivedDateTerm endDateTerm = 
+				 new ReceivedDateTerm(ComparisonTerm.LT, c.getTime());
+			
+			SearchTerm dateTerm = new AndTerm(startDateTerm, endDateTerm);
+				
+				
+			
+//        Calendar calendar = Calendar.getInstance();  
+//        calendar.set(Calendar.DAY_OF_WEEK, calendar.get(Calendar.DAY_OF_WEEK - (Calendar.DAY_OF_WEEK - 1)) - 1);  
+//        calendar.add(Calendar.YEAR, -1);
+//        Date mondayDate = calendar.getTime();  
+//        SearchTerm comparisonTermGe = new SentDateTerm(ComparisonTerm.GE, mondayDate);  
+//        SearchTerm comparisonTermLe = new SentDateTerm(ComparisonTerm.LE, new Date());  
+//        SearchTerm comparisonAndTerm = new AndTerm(comparisonTermGe, comparisonTermLe); 
+			
+			
+			
+			Message[] msgs = folder.search(dateTerm);
+			System.out.println("FOUND " + msgs.length + " MESSAGES");
+			
+			for (int i = 0; i < msgs.length; i++) {
+				Message msg = msgs[i];
+				System.out.println("ReceivedDate："+msg.getReceivedDate());
+			}
+			
+			
+			folder.close(true);
+			
+//		Folder rootFolder = store.getDefaultFolder();
+//		Folder[] folders = rootFolder.list();
+//		
+//		for (Folder folder : folders) {
+//			System.out.println(folder.getName());
+//		}
+//		/*
+//		 *  INBOX
+//			草稿箱
+//			已发送
+//			已删除
+//			垃圾邮件
+//			病毒文件夹
+//			广告邮件
+//			订阅邮件
+//			1
+//			11
+//		 */
+//		assertTrue(folders.length>1);
+			store.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Test

@@ -69,17 +69,17 @@ public class WXTest {
 		menuContentSB.append("{");
 		menuContentSB.append("\"button\": [");
 		menuContentSB.append("{");
-		menuContentSB.append("    \"type\": \"click\", ");
-		menuContentSB.append("    \"name\": \"今日歌曲\", ");
-		menuContentSB.append("    \"key\": \"V1001_TODAY_MUSIC\"");
+		menuContentSB.append("    \"type\": \"view\", ");
+		menuContentSB.append("    \"name\": \"新瑞\", ");
+		menuContentSB.append("    \"url\": \"http://wx.gffairs.com/ces-wx/?v=3\"");
 		menuContentSB.append("}, ");
 		menuContentSB.append("{");
 		menuContentSB.append("    \"name\": \"菜单\", ");
 		menuContentSB.append("    \"sub_button\": [");
 		menuContentSB.append("        {");
 		menuContentSB.append("            \"type\": \"view\", ");
-		menuContentSB.append("            \"name\": \"新瑞\", ");
-		menuContentSB.append("            \"url\": \"http://web.gffairs.com/ces-wx/\"");
+		menuContentSB.append("            \"name\": \"实力新瑞\", ");
+		menuContentSB.append("            \"url\": \"http://wx.gffairs.com/ces-wx/?v=2\"");
 		menuContentSB.append("        }, ");
 		menuContentSB.append("        {");
 		menuContentSB.append("            \"type\": \"view\", ");
@@ -96,7 +96,8 @@ public class WXTest {
 		menuContentSB.append(" ]");
 		menuContentSB.append("}");
 		
-		String access_token = "4-Cz8PFo4pJj98NcdXt4wLokq2SsOwTUxLpTx0pl95S-Lgyr82ntdLq488kJZ6a-Qre0GWMQ3ta3W--tpIaIt_8SKAYKVDGvi3e8dyUeV8y__n36e5wNNR_lR_ihXMugEXIjADAOHS";
+		String access_token = "g2kb_T3ueMPIr7hpw75SC6pzAueTmy0Zr4ULyMTq1DCoWY_IUccIyuripuy51jv3Rpks_eaSzffjJT4xNeSD6fFVwrurg1q-pkyASVe1Kzkx4PZEQozCTWrqV22GBo4HBKViAEAQZK"
+				+ "";
 		
 		String turl = String.format("https://api.weixin.qq.com/cgi-bin/menu/create?access_token=%s", access_token);
 		CloseableHttpClient client = HttpClients.createDefault();

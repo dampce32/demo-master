@@ -1,17 +1,17 @@
-Date: Mon, 15 Feb 2016 16:58:35 +0800 (CST)
-From: linyisong032@sina.com
+Date: Wed, 22 Jun 2016 10:18:28 +0800 (CST)
+From: 578935829@qq.com
 To: csit_java_test@163.com
-Message-ID: <282431241.3.1455526715922@LYS>
-Subject: SinaMail Sending a html
+Message-ID: <605017288.4.1466561908991@LYS>
+Subject: QQMail Sending a html
 MIME-Version: 1.0
 Content-Type: multipart/mixed; 
-	boundary="----=_Part_1_1423407397.1455526715896"
+	boundary="----=_Part_2_836772918.1466561908926"
 
-------=_Part_1_1423407397.1455526715896
+------=_Part_2_836772918.1466561908926
 Content-Type: multipart/related; 
-	boundary="----=_Part_0_183538930.1455526715889"
+	boundary="----=_Part_1_1231263406.1466561908921"
 
-------=_Part_0_183538930.1455526715889
+------=_Part_1_1231263406.1466561908921
 Content-Type: text/html;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
@@ -19,7 +19,7 @@ Content-Transfer-Encoding: quoted-printable
 =B6=E8=8C=82=E7=9A=84=E9=82=AE=E4=BB=B6=E6=B5=8B=E8=AF=95=EF=BC=81=EF=BC=81=
 =EF=BC=81</h4> </br><a href =3D http://www.csit.cc/><img src =3D "cid:logo_=
 jpg"></a>
-------=_Part_0_183538930.1455526715889
+------=_Part_1_1231263406.1466561908921
 Content-Type: image/jpeg; name=Koala.jpg
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename=Koala.jpg
@@ -13724,9 +13724,9 @@ KsVP0v7I45njmKV7KYr61/1fl0b2qlQTxAAH+r9lOpc1R4qf/KaY0aSBqJoyokqJoyA8WsMD5Z/2
 Tvp+ICpH7P8AN+zqo+Inyr1IjrJXn8khp0me8nhYOxSCdgkKO1whKhbn/X93FdKmtaqD+3/N149S
 aWpkRY6dqaJY42qFjs8ZZ5nlkjZpmJUiJ1+ijn3dVeTtb4B1R5NJVaEkn/V8+u4Xijpp6SFlimp6
 qNHgjlVIgrtLCyxll1NpaT6An6W92mA8HwkyadMeEZJjEDmvE/t/1f5uv//Z
-------=_Part_0_183538930.1455526715889--
+------=_Part_1_1231263406.1466561908921--
 
-------=_Part_1_1423407397.1455526715896
+------=_Part_2_836772918.1466561908926
 Content-Type: image/jpeg; name=Koala.jpg
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename=Koala.jpg
@@ -27430,7 +27430,7 @@ KsVP0v7I45njmKV7KYr61/1fl0b2qlQTxAAH+r9lOpc1R4qf/KaY0aSBqJoyokqJoyA8WsMD5Z/2
 Tvp+ICpH7P8AN+zqo+Inyr1IjrJXn8khp0me8nhYOxSCdgkKO1whKhbn/X93FdKmtaqD+3/N149S
 aWpkRY6dqaJY42qFjs8ZZ5nlkjZpmJUiJ1+ijn3dVeTtb4B1R5NJVaEkn/V8+u4Xijpp6SFlimp6
 qNHgjlVIgrtLCyxll1NpaT6An6W92mA8HwkyadMeEZJjEDmvE/t/1f5uv//Z
-------=_Part_1_1423407397.1455526715896
+------=_Part_2_836772918.1466561908926
 Content-Type: application/octet-stream; 
 	name*=UTF-8''8%E6%9C%8829%E6%97%A5%E4%BC%9A%E8%AE%AE%E8%AE%B0%E5%BD%95.docx
 Content-Transfer-Encoding: base64
@@ -27711,4 +27711,4 @@ AAYACAAAACEAheSy5EQCAADQBgAAEgAAAAAAAAAAAAAAAAAEMgAAd29yZC9mb250VGFibGUueG1s
 UEsBAi0AFAAGAAgAAAAhABegFk4CAQAArAEAABQAAAAAAAAAAAAAAAAAeDQAAHdvcmQvd2ViU2V0
 dGluZ3MueG1sUEsBAi0AFAAGAAgAAAAhAKY3uje0AwAA/hQAABIAAAAAAAAAAAAAAAAArDUAAHdv
 cmQvbnVtYmVyaW5nLnhtbFBLBQYAAAAADQANAEkDAACQOQAAAAA=
-------=_Part_1_1423407397.1455526715896--
+------=_Part_2_836772918.1466561908926--
