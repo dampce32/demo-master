@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
@@ -32,8 +33,7 @@ import javax.mail.search.SentDateTerm;
 
 import org.junit.Test;
 
-import com.sun.mail.imap.IMAPFolder;
-import com.sun.mail.imap.SortTerm;
+import com.sun.mail.imap.IMAPMessage;
 /**
  * @description: QQ邮箱测试
  * @copyright: 福建骏华信息有限公司 (c)2016</p>
@@ -284,12 +284,12 @@ public class JavamailQQTest {
 		Session session = Session.getDefaultInstance(props);
 		session.setDebug(true);
 		
-		URLName urlname = new URLName("imap","imap.exmail.qq.com",143,null,"lys@csit.cc","lys89625");
+		URLName urlname = new URLName("imap","imap.exmail.qq.com",143,null,"sherry@gffairs.com","Ericzhou741015");
 		
 		Store store = session.getStore(urlname);
 		store.connect();
 		
-		javax.mail.Folder folder = store.getFolder("Sent Messages");
+		javax.mail.Folder folder = store.getFolder("INBOX");
 		folder.open(javax.mail.Folder.READ_WRITE);
 		
 //		String name = folder.getName();
@@ -378,18 +378,50 @@ public class JavamailQQTest {
 			Properties props = new Properties();
 			props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");//ssl必须加这个
 			props.put("mail.imap.ssl.enable", "true");
+			
+			props.put("mail.imap.partialfetch", "false");//禁用fetchsize，防止重复读取附件，文件不断变大，程序不停止
 			 props.setProperty("mail.imap.auth.login.disable", "true"); 
 			Session session = Session.getDefaultInstance(props);
-			session.setDebug(true);
+//			session.setDebug(true);
 			
 			URLName urlname = new URLName("imap","imap.exmail.qq.com",993,null,"lys@csit.cc","lys89625");
 			
 			Store store = session.getStore(urlname);
 			store.connect();
 			
-			javax.mail.Folder folder = store.getFolder("Sent Messages");
+			javax.mail.Folder folder = store.getFolder("INBOX");
 			folder.open(javax.mail.Folder.READ_WRITE);
 			
+			
+			
+			Message[] msgs = folder.getMessages();
+			System.out.println(msgs.length);
+			
+			SimpleDateFormat sm = new SimpleDateFormat("yyyy-MM-dd");
+			String date =  sm.format(new Date());
+			String emlPath = "D:/mail_files/MailBox/OutBox/"+date+"/";
+			
+			File dirs = new File(emlPath);
+			if (!dirs.exists()) {
+				dirs.mkdirs();
+			}
+			
+			int start = 403;
+			msgs = folder.getMessages(start, msgs.length);
+			
+			
+			for (Message message : msgs) {
+				
+				System.out.println(message.getMessageNumber());
+				System.out.println(message.getSubject());
+				System.out.println(message.getSize());
+				
+				
+//				msg.writeTo(os);
+				message.writeTo(new FileOutputStream(emlPath+message.getMessageNumber()+".eml"));
+				
+				System.out.println("保存了:"+message.getSubject());
+			}
 			
 			folder.close(true);
 			store.close();

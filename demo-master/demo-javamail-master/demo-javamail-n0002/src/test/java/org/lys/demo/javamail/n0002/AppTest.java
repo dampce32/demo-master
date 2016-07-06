@@ -214,4 +214,35 @@ public class AppTest {
 		System.out.println(MimeUtility.decodeText(internetAddress.getPersonal()) );
 	}
 	
+	
+	@Test
+	public void testWriteTo() throws Exception {
+		try {
+			Properties props = new Properties();
+//			props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");//ssl必须加这个
+//			props.put("mail.imap.ssl.enable", "true");
+//			 props.setProperty("mail.imap.auth.login.disable", "true"); 
+			Session session = Session.getDefaultInstance(props);
+			session.setDebug(true);
+			
+			URLName urlname = new URLName("imap","imap.exmail.qq.com",143,null,"sherry@gffairs.com","Ericzhou741015");
+			
+			Store store = session.getStore(urlname);
+			store.connect();
+			
+			javax.mail.Folder folder = store.getFolder("INBOX");
+			folder.open(javax.mail.Folder.READ_WRITE);
+			
+			Message[] messages = folder.getMessages();
+			Message message = messages[messages.length-1];
+			System.out.println(message.getSubject());
+			message.writeTo(new FileOutputStream("D:/32/11.eml"));
+			
+			
+			folder.close(true);
+			store.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
