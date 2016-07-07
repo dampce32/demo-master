@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -33,7 +34,7 @@ import javax.mail.search.SentDateTerm;
 
 import org.junit.Test;
 
-import com.sun.mail.imap.IMAPMessage;
+import com.sun.mail.imap.IMAPFolder;
 /**
  * @description: QQ邮箱测试
  * @copyright: 福建骏华信息有限公司 (c)2016</p>
@@ -374,25 +375,22 @@ public class JavamailQQTest {
 	 */
 	@Test
 	public void testGetMsgsExmailFoldersByIMAP() throws Exception {
-		try {
 			Properties props = new Properties();
 			props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");//ssl必须加这个
-			props.put("mail.imap.ssl.enable", "true");
+			props.put("mail.imap.ssl.enable", "true");//开启ssl：false for the "imap" protocol and true for the "imaps" protocol
 			
-			props.put("mail.imap.partialfetch", "false");//禁用fetchsize，防止重复读取附件，文件不断变大，程序不停止
-			 props.setProperty("mail.imap.auth.login.disable", "true"); 
+			props.put("mail.imaps.partialfetch", "false");//禁用fetchsize，防止重复读取附件，文件不断变大，程序不停止
+			 props.setProperty("mail.imaps.auth.login.disable", "true"); 
 			Session session = Session.getDefaultInstance(props);
-//			session.setDebug(true);
+			session.setDebug(true);
 			
-			URLName urlname = new URLName("imap","imap.exmail.qq.com",993,null,"lys@csit.cc","lys89625");
+			URLName urlname = new URLName("imaps","imap.exmail.qq.com",993,null,"lys@csit.cc","lys89625");
 			
 			Store store = session.getStore(urlname);
 			store.connect();
 			
 			javax.mail.Folder folder = store.getFolder("INBOX");
 			folder.open(javax.mail.Folder.READ_WRITE);
-			
-			
 			
 			Message[] msgs = folder.getMessages();
 			System.out.println(msgs.length);
@@ -406,27 +404,99 @@ public class JavamailQQTest {
 				dirs.mkdirs();
 			}
 			
-			int start = 403;
-			msgs = folder.getMessages(start, msgs.length);
+			int start = 1;
 			
-			
-			for (Message message : msgs) {
-				
-				System.out.println(message.getMessageNumber());
-				System.out.println(message.getSubject());
-				System.out.println(message.getSize());
-				
-				
-//				msg.writeTo(os);
-				message.writeTo(new FileOutputStream(emlPath+message.getMessageNumber()+".eml"));
-				
-				System.out.println("保存了:"+message.getSubject());
-			}
+			int end = msgs.length;
+			receiveMail(emlPath, start,end);
 			
 			folder.close(true);
 			store.close();
+	}
+	/**
+	 * @description: 定位取得单封邮件
+	 * @createTime: 2016年7月7日 下午5:14:31
+	 * @author: lys
+	 * @throws Exception
+	 */
+	@Test
+	public void testGetMsgExmailFoldersByIMAP() throws Exception {
+			Properties props = new Properties();
+			props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");//ssl必须加这个
+			props.put("mail.imap.ssl.enable", "true");//开启ssl：false for the "imap" protocol and true for the "imaps" protocol
+			
+			props.put("mail.imaps.partialfetch", "false");//禁用fetchsize，防止重复读取附件，文件不断变大，程序不停止
+			props.setProperty("mail.imaps.auth.login.disable", "true");
+			props.put("mail.imaps.socketFactory.fallback","false");
+			Session session = Session.getDefaultInstance(props);
+			session.setDebug(true);
+			
+			URLName urlname = new URLName("imaps","imap.exmail.qq.com",993,null,"lys@csit.cc","lys89625");
+			
+			Store store = session.getStore(urlname);
+			store.connect();
+			
+			javax.mail.Folder folder = store.getFolder("INBOX");
+			folder.open(javax.mail.Folder.READ_WRITE);
+			IMAPFolder inbox = (IMAPFolder) folder; 
+			
+//			Message[] msgs = folder.getMessages();
+//			for (Message message : msgs) {
+//				String uid = Long.toString(inbox.getUID(message));
+//				
+//				System.out.println("-------------邮件:"+uid+"-----");
+//				
+//				dumpEnvelope(message);
+//				
+//			}
+			
+			
+			
+			Message thisMsg = inbox.getMessageByUID(1081);
+			
+			dumpEnvelope(thisMsg);
+			
+			
+			
+			folder.close(true);
+			store.close();
+	} 
+	
+	
+	
+	
+	
+	private void receiveMail(String emlPath, int start,int end)
+			throws MessagingException, IOException, FileNotFoundException {
+		
+			Properties props = new Properties();
+			props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");//ssl必须加这个
+			props.put("mail.imap.ssl.enable", "true");//开启ssl：false for the "imap" protocol and true for the "imaps" protocol
+			
+			props.put("mail.imaps.partialfetch", "false");//禁用fetchsize，防止重复读取附件，文件不断变大，程序不停止
+			 props.setProperty("mail.imaps.auth.login.disable", "true"); 
+			Session session = Session.getDefaultInstance(props);
+			session.setDebug(true);
+			
+			URLName urlname = new URLName("imaps","imap.exmail.qq.com",993,null,"lys@csit.cc","lys89625");
+			
+			Store store = session.getStore(urlname);
+			store.connect();
+			
+			javax.mail.Folder folder = store.getFolder("INBOX");
+			folder.open(javax.mail.Folder.READ_WRITE);
+		try {
+			
+			Message[] msgs = folder.getMessages(start, end);
+			
+			for (Message message : msgs) {
+				dumpEnvelope(message);
+				start++;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			folder.close(true);
+			store.close();
+			receiveMail(emlPath, start,end);
 		}
 	}
 	
@@ -516,6 +586,7 @@ public class JavamailQQTest {
 	}
 	
 	public static void dumpEnvelope(Message m) throws Exception {
+		System.out.println("msgnum: " + m.getMessageNumber());
 		System.out.println("FROM: " + JavaMailUtil.getFrom(m));
 		System.out.println("REPLY TO: " + JavaMailUtil.getReplyTo(m));
 		System.out.println("TO: " + JavaMailUtil.getTo(m));
