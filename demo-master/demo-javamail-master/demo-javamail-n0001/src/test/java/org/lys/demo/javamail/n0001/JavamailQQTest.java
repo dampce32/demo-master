@@ -384,7 +384,7 @@ public class JavamailQQTest {
 			Session session = Session.getDefaultInstance(props);
 			session.setDebug(true);
 			
-			URLName urlname = new URLName("imaps","imap.exmail.qq.com",993,null,"lys@csit.cc","lys89625");
+			URLName urlname = new URLName("imaps","imap.exmail.qq.com",993,null,"sherry@gffairs.com","Ericzhou741015");
 			
 			Store store = session.getStore(urlname);
 			store.connect();
