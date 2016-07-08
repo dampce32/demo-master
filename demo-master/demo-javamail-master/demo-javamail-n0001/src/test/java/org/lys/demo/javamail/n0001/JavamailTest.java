@@ -30,6 +30,8 @@ import javax.mail.search.SentDateTerm;
 
 import org.junit.Test;
 
+import com.sun.mail.imap.IMAPFolder;
+
 public class JavamailTest {
 	
 	public static String MAIL_SMTP_HOST="smtp.163.com";
@@ -388,6 +390,45 @@ public class JavamailTest {
 		store.connect();
         store.close();
 	}
+	
+	@Test
+	public void testGetMsgExmailFoldersByIMAP() throws Exception {
+			Properties props = new Properties();
+			props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");//ssl必须加这个
+//			props.put("mail.imap.ssl.enable", "true");//开启ssl：false for the "imap" protocol and true for the "imaps" protocol
+			
+//			props.put("mail.imap.partialfetch", "false");//禁用fetchsize，防止重复读取附件，文件不断变大，程序不停止
+//			props.setProperty("mail.imap.auth.login.disable", "true");
+//			props.put("mail.imap.socketFactory.fallback","false");
+			Session session = Session.getDefaultInstance(props);
+			session.setDebug(true);
+			
+			URLName urlname = new URLName("imap","imap.163.com",143,null,"csit_java_test@163.com","csitJava32");
+			
+			Store store = session.getStore(urlname);
+			store.connect();
+			
+			javax.mail.Folder folder = store.getFolder("INBOX");
+			folder.open(javax.mail.Folder.READ_WRITE);
+			IMAPFolder inbox = (IMAPFolder) folder; 
+			
+//			Message[] msgs = folder.getMessages();
+//			for (Message message : msgs) {
+//				String uid = Long.toString(inbox.getUID(message));
+//				
+//				System.out.println("-------------邮件:"+uid+"-----");
+//				
+//				dumpEnvelope(message);
+//				
+//			}
+			
+			Message thisMsg = inbox.getMessageByUID(1454652894);
+			
+			dumpEnvelope(thisMsg);
+			
+			folder.close(true);
+			store.close();
+	} 
 	
 	public static void dumpEnvelope(Message m) throws Exception {
 		System.out.println("FROM: " + JavaMailUtil.getFrom(m));
