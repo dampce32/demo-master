@@ -14,12 +14,14 @@ import java.util.Properties;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
+import javax.mail.FetchProfile;
 import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.Transport;
+import javax.mail.UIDFolder;
 import javax.mail.URLName;
 import javax.mail.event.StoreEvent;
 import javax.mail.event.StoreListener;
@@ -35,6 +37,7 @@ import javax.mail.search.SentDateTerm;
 import org.junit.Test;
 
 import com.sun.mail.imap.IMAPFolder;
+import com.sun.mail.pop3.POP3Folder;
 /**
  * @description: QQ邮箱测试
  * @copyright: 福建骏华信息有限公司 (c)2016</p>
@@ -228,6 +231,128 @@ public class JavamailQQTest {
 		 */
 		assertTrue(folders.length>1);
         store.close();
+	}
+	
+	@Test
+	public void testListFoldersUIDByIMAP() throws Exception {
+		try {
+			Properties props = new Properties();
+			props.put("mail.imap.ssl.enable", "true");
+			props.put("mail.imaps.socketFactory.fallback","false");
+			props.put("mail.imaps.partialfetch", "false");
+			props.put("mail.imaps.auth.login.disable", "true"); 
+			
+			Session session = Session.getDefaultInstance(props);
+//			session.setDebug(true);
+
+			URLName urlname = new URLName("imaps","imap.exmail.qq.com",993,null,"lys@csit.cc","lys89625");
+			
+			Store store = session.getStore(urlname);
+			store.connect();
+			
+			Folder folder = store.getFolder("INBOX");
+			
+			System.out.println("开始"+Calendar.getInstance().getTime());
+			IMAPFolder imapFolder = (IMAPFolder) folder;
+			imapFolder.open(javax.mail.Folder.READ_ONLY);
+			Message[] msgs = imapFolder.getMessages();
+			
+			System.out.println("条数:"+imapFolder.getMessageCount());
+
+			FetchProfile fp = new FetchProfile();
+			fp.add(UIDFolder.FetchProfileItem.UID);
+			imapFolder.fetch(msgs, fp);
+			  
+			for (Message message : msgs) {
+				  System.out.println(imapFolder.getUID(message));
+			}
+			  System.out.println("结束"+Calendar.getInstance().getTime());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	@Test
+	public void testListFoldersUIDByPOP3() throws Exception {
+		try {
+			Properties props = new Properties();
+			props.put("mail.pop3.ssl.enable", "true");
+			props.put("mail.pop3s.socketFactory.fallback","false");
+			props.put("mail.pop3s.partialfetch", "false");
+			props.put("mail.pop3s.auth.login.disable", "true"); 
+			
+			Session session = Session.getDefaultInstance(props);
+			session.setDebug(true);
+
+			URLName urlname = new URLName("pop3s","pop.exmail.qq.com",995,null,"lys@csit.cc","lys89625");
+			
+			Store store = session.getStore(urlname);
+			store.connect();
+			
+			Folder folder = store.getFolder("INBOX");
+			
+			POP3Folder imapFolder = (POP3Folder) folder;   
+			imapFolder.open(javax.mail.Folder.READ_ONLY);
+			Message[] msgs = imapFolder.getMessages();
+			System.out.println("条数:"+imapFolder.getMessageCount());
+			System.out.println("开始"+Calendar.getInstance().getTime());
+			  FetchProfile fp = new FetchProfile();
+			  fp.add(UIDFolder.FetchProfileItem.UID);
+			  imapFolder.fetch(msgs, fp);
+			  
+			for (Message message : msgs) {
+				
+				if("ZC0411-5wmXuN7h5ONgvyN0cWXNM6j".equals(imapFolder.getUID(message))){
+					 System.out.println(message.getContentType());
+					  System.out.println(message.getSubject());
+					  break;
+				}
+			}
+			  System.out.println("结束"+Calendar.getInstance().getTime());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	@Test
+	public void testGetMsgByPOP3UID() throws Exception {
+		try {
+			String folderName = "INBOX";
+			String UID = "ZC0420-169UGGT2a4EOAlEGCUXuS6j";
+			
+			Properties props = new Properties();
+			props.put("mail.pop3.ssl.enable", "true");
+			props.put("mail.pop3s.socketFactory.fallback","false");
+			props.put("mail.pop3s.partialfetch", "false");
+			props.put("mail.pop3s.auth.login.disable", "true"); 
+			
+			Session session = Session.getDefaultInstance(props);
+//			session.setDebug(true);
+
+			URLName urlname = new URLName("pop3s","pop.exmail.qq.com",995,null,"lester@gffairs.com","lqz13799895133");
+			
+			Store store = session.getStore(urlname);
+			store.connect();
+			
+			Folder folder = store.getFolder(folderName);
+			
+			POP3Folder imapFolder = (POP3Folder) folder;   
+			imapFolder.open(javax.mail.Folder.READ_ONLY);
+			Message[] msgs = imapFolder.getMessages();
+			FetchProfile fp = new FetchProfile();
+			fp.add(UIDFolder.FetchProfileItem.UID);
+			imapFolder.fetch(msgs, fp);
+			
+			for (Message message : msgs) {
+				if(UID.equals(imapFolder.getUID(message))){
+					System.out.println("Subject:"+message.getSubject());
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**

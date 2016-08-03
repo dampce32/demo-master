@@ -139,6 +139,7 @@ public class search {
 					term = fromTerm;
 			}
 			if (today) {
+				
 				Calendar c = Calendar.getInstance();
 				c.set(Calendar.HOUR, 0);
 				c.set(Calendar.MINUTE, 0);
