@@ -1,4 +1,4 @@
-package org.lys.demo.encode;
+package org.lys.demo.encode.base64;
 
 import java.io.IOException;
 

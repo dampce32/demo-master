@@ -1,4 +1,4 @@
-package org.lys.demo.encode;
+package org.lys.demo.encode.message_digest;
 
 import java.io.IOException;
 import java.security.MessageDigest;

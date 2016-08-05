@@ -1,4 +1,4 @@
-package org.lys.demo.encode;
+package org.lys.demo.encode.symmetric_encryption;
 
 import java.security.Key;
 import java.security.Security;
