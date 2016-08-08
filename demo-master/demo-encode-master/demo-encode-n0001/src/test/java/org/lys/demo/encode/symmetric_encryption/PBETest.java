@@ -21,16 +21,20 @@ public class PBETest {
 			// 初始化盐
 			SecureRandom random = new SecureRandom();
 			byte[] salt = random.generateSeed(8);
+			String saltStr = Hex.encodeHexString(salt);
+			
+			byte[] saltBytes = Hex.decodeHex(saltStr.toCharArray());
+			System.out.println("jdk pbe salt decode:" + saltBytes);
 			
 			// 口令与密钥
-			String password = "timliu";
+			String password = "1111111111111111111";
 			PBEKeySpec pbeKeySpec = new PBEKeySpec(password.toCharArray()); 
 			SecretKeyFactory factory = SecretKeyFactory.getInstance("PBEWITHMD5andDES");
 			Key key = factory.generateSecret(pbeKeySpec);
 			
 									
 			// 加密
-			PBEParameterSpec pbeParameterSpac = new PBEParameterSpec(salt, 100);
+			PBEParameterSpec pbeParameterSpac = new PBEParameterSpec(saltBytes, 100);
 			Cipher cipher = Cipher.getInstance("PBEWITHMD5andDES");
 			cipher.init(Cipher.ENCRYPT_MODE, key, pbeParameterSpac);
 			byte[] result = cipher.doFinal(src.getBytes());
