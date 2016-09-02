@@ -19,6 +19,7 @@
   	<module>demo-thread-master</module>
     <module>demo-wx-master</module>
     <module>demo-encode-master</module>
+    <module>demo-getui-master</module>
   </modules>
   <dependencies>
     <dependency>

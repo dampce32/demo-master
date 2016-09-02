@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.lys.demo</groupId>
+    <artifactId>demo-master</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>demo-getui-master</artifactId>
+  <packaging>war</packaging>
+  <name>demo-getui-master Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+  <dependencies>
+	<dependency>
+	    <groupId>com.gexin.platform</groupId>
+	    <artifactId>gexin-rp-sdk-http</artifactId>
+	    <version>4.0.1.2</version>
+	</dependency>
+  </dependencies>
+   <repositories>
+    <repository>
+        <id>getui-nexus</id>
+        <url>http://mvn.gt.igexin.com/nexus/content/repositories/releases/</url>
+    </repository>
+ </repositories>
+  <build>
+    <finalName>demo-getui-master</finalName>
+  </build>
+</project>
