@@ -20,6 +20,7 @@
     <module>demo-wx-master</module>
     <module>demo-encode-master</module>
     <module>demo-getui-master</module>
+    <module>demo-web-master</module>
   </modules>
   <dependencies>
     <dependency>
