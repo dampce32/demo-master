@@ -21,6 +21,7 @@
     <module>demo-encode-master</module>
     <module>demo-getui-master</module>
     <module>demo-web-master</module>
+    <module>demo-h5-master</module>
   </modules>
   <dependencies>
     <dependency>
