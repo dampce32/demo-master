@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+
+	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+</head>
+<body>
+	style属性<br>
+	<div id="vm" v-bind:style="{ color: activeColor, fontSize: fontSize + 'px' }">style</div>
+	
+	<script type="text/javascript">
+		var vm = new Vue({
+		  el: '#vm',
+		  data: {
+			  activeColor: 'red',
+			  fontSize: 30
+			}
+		})
+	</script>
+</body>
+</html>

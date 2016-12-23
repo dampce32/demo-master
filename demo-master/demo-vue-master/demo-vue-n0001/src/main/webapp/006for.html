@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+
+	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+</head>
+<body>
+	列表渲染<br>
+	
+	<ul id="example-1">
+	  <li v-for="item in items">
+	    {{ item.message }}
+	  </li>
+	</ul>
+	index
+	<ul id="example-2">
+	  <li v-for="(item, index) in items">
+	    {{ parentMessage }} - {{ index }} - {{ item.message }}
+	  </li>
+	</ul>
+	object
+	<ul id="repeat-object" class="demo">
+	  	<li v-for="value in object">
+	    	{{ value }}
+	  	</li>
+	  	<div v-for="(value, key) in object">
+		  	{{ key }} : {{ value }}
+	  	</div>
+	  	<div v-for="(value, key, index) in object">
+		  	{{ index }}. {{ key }} : {{ value }}
+		</div>
+		
+		整数迭代v-for
+		<div>
+		  <span v-for="n in 10">{{ n }}</span>
+		</div>
+	</ul>
+	
+	
+	
+	<script type="text/javascript">
+		var example1 = new Vue({
+		  el: '#example-1',
+		  data: {
+		    items: [
+		      {message: 'Foo' },
+		      {message: 'Bar' }
+		    ]
+		  }
+		})
+		
+		var example2 = new Vue({
+		  el: '#example-2',
+		  data: {
+		    parentMessage: 'Parent',
+		    items: [
+		      { message: 'Foo' },
+		      { message: 'Bar' }
+		    ]
+		  }
+		})
+		
+		new Vue({
+		  el: '#repeat-object',
+		  data: {
+		    object: {
+		      FirstName: 'John',
+		      LastName: 'Doe',
+		      Age: 30
+		    }
+		  }
+		})
+	</script>
+</body>
+</html>

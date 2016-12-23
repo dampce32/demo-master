@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+
+	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+</head>
+<body>
+	class属性<br>
+	<div  id="example" class="static"
+	     v-bind:class="{ active: isActive, 'text-danger': hasError }">
+	
+	class
+	</div>
+	<div id="classObject" v-bind:class="classObject">classObject</div>
+	array
+	<div id="array" v-bind:class="[activeClass, errorClass]">数组</div>
+	
+	
+	<script type="text/javascript">
+		var vm = new Vue({
+		  el: '#example',
+		  data: {
+			  isActive: true,
+			  hasError: false
+			}
+		})
+		
+		var vm2 = new Vue({
+			  el: '#classObject',
+			  data: {
+				  classObject: {
+					    active: true,
+					    'text-danger': false
+					  }
+				}
+			})
+		
+		var vm3 = new Vue({
+			  el: '#array',
+			  data: {
+				  activeClass: 'active',
+				  errorClass: 'text-danger'
+				}
+			})
+	</script>
+</body>
+</html>

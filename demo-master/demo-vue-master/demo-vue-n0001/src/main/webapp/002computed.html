@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+
+	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+</head>
+<body>
+	计算属性<br>
+	<div id="example">
+	  <p>Original message: "{{ message }}"</p>
+	  <p>Computed reversed message: "{{ reversedMessage }}"</p>
+	</div>
+	
+	<script type="text/javascript">
+		var vm = new Vue({
+		  el: '#example',
+		  data: {
+		    message: 'Hello'
+		  },
+		  computed: {
+		    reversedMessage: function () {
+		      return this.message.split('').reverse().join('')
+		    }
+		  }
+		})
+	</script>
+</body>
+</html>

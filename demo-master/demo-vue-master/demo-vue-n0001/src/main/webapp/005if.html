@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+
+	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+</head>
+<body>
+	条件渲染<br>
+	v-if:
+	<div id="vm">
+		<h1  v-if="ok">Yes</h1>
+	v-else:
+		<h1 v-if="ok">Yes</h1>
+		<h1 v-else>No</h1>
+		
+		v-else-if：
+		<div v-if="type === 'A'">
+		  A
+		</div>
+		<div v-else-if="type === 'B'">
+		  B
+		</div>
+		<div v-else-if="type === 'C'">
+		  C
+		</div>
+		<div v-else>
+		  Not A/B/C
+		</div>
+	</div>
+	<script type="text/javascript">
+		var vm = new Vue({
+		  el: '#vm',
+		  data: {
+			  ok: false,
+			  type:'B'
+			}
+		})
+	</script>
+</body>
+</html>
