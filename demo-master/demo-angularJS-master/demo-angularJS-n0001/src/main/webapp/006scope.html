@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<script src="https://cdn.static.runoob.com/libs/angular.js/1.4.6/angular.min.js"></script> 
+	<style>
+	input.ng-invalid {
+	    background-color: lightblue;
+	}
+	</style>
+
+</head>
+<body>
+	<div ng-app="myApp" ng-controller="myCtrl">
+		名字: <input ng-model="name">
+		<h1>你输入了: {{name}}</h1>
+		<hr>
+		验证用户输入
+		<form name="myForm">
+		    Email:
+		    <input type="email" name="myAddress" ng-model="text" required>
+		    <span ng-show="myForm.myAddress.$error.email">不是一个合法的邮箱地址</span>
+			 <h1>状态</h1>
+		    {{myForm.myAddress.$valid}}
+		    {{myForm.myAddress.$dirty}}
+		    {{myForm.myAddress.$touched}}
+		</form>
+	</div>
+
+	<script>
+		var app = angular.module('myApp', []);
+		app.controller('myCtrl', function($scope) {
+		    $scope.name = "John Doe";
+		});
+	</script>
+	
+</body>
+</html>

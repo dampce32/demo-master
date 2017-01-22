@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<script src="https://cdn.static.runoob.com/libs/angular.js/1.4.6/angular.min.js"></script>
+</head>
+<body>
+	<div ng-app="" ng-init="quantity=1;cost=5;person={firstName:'John',lastName:'Doe'};points=[1,15,19,2,40]">
+		<p>我的第一个表达式: {{ 5 + 5 }}</p>
+		
+		<p>总价： {{ quantity * cost }}</p>
+		<p>总价： <span ng-bind="quantity * cost"></span></p>
+		<hr>
+		对象
+		<p>姓为 {{ person.lastName }}</p>
+		<hr>
+		数组
+		<p>第三个值为 {{ points[2] }}</p>
+	</div>
+</body>
+</html>

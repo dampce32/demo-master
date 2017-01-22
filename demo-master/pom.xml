@@ -23,6 +23,8 @@
     <module>demo-web-master</module>
     <module>demo-h5-master</module>
     <module>demo-vue-master</module>
+    <module>demo-angularJS-master</module>
+    <module>demo-jsf-master</module>
   </modules>
   <dependencies>
     <dependency>

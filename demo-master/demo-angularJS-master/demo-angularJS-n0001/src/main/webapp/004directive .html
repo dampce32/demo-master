@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://cdn.static.runoob.com/libs/angular.js/1.4.6/angular.min.js"></script> 
+</head>
+<body>
+
+	ng-app 指令初始化一个 AngularJS 应用程序<br>
+	ng-init 指令初始化应用程序数据。<br>
+	ng-model 指令把元素值（比如输入域的值）绑定到应用程序。<br>
+	<div  ng-app="myApp" ng-init="firstName='John';quantity=1;price=5;names=['Jani','Hege','Kai']">
+		<p>在输入框中尝试输入:</p>
+		<p>姓名: <input type="text" ng-model="firstName"></p>
+		<p>你输入的为: {{ firstName }}</p>
+		<hr>
+		数据绑定
+		<h2>价格计算器</h2>
+		数量： <input type="number"    ng-model="quantity">
+		价格： <input type="number" ng-model="price">
+		<p><b>总价：</b> {{ quantity * price }}</p>
+		
+		<p>使用 ng-repeat 来循环数组</p>
+	  	<ul>
+		    <li ng-repeat="x in names">
+		      {{ x }}
+		    </li>
+  		</ul>
+  		
+  		<hr>
+		自定义
+  		<runoob-directive></runoob-directive>
+	</div>
+	
+	<script>
+	var app = angular.module("myApp", []);
+	app.directive("runoobDirective", function() {
+	    return {
+	        template : "<h1>自定义指令!</h1>"
+	    };
+	});
+	</script>
+</body>
+</html>
