@@ -25,6 +25,8 @@
     <module>demo-vue-master</module>
     <module>demo-angularJS-master</module>
     <module>demo-jsf-master</module>
+    <module>demo-oracle-master</module>
+    <module>demo-requirejs-master</module>
   </modules>
   <dependencies>
     <dependency>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+ <!DOCTYPE faces-config PUBLIC
+ "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
+ "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
+
+ <faces-config>
+ 	<!-- 页面流程 -->
+    <navigation-rule>
+    	<!-- 请求来自 -->
+        <from-view-id>/pages/index.jsp</from-view-id>
+        <navigation-case>
+            <from-outcome>login</from-outcome>
+            <!-- 请求导向 -->
+            <to-view-id>/pages/welcome.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+	<!-- 统一管理我们的Bean -->
+    <managed-bean>
+        <managed-bean-name>user</managed-bean-name>
+        <managed-bean-class>
+             org.lys.demo.jsf.UserBean
+        </managed-bean-class>
+        <!-- 存活范围是session -->
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    
+ </faces-config>
