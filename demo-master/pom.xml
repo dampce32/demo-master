@@ -27,6 +27,7 @@
     <module>demo-jsf-master</module>
     <module>demo-oracle-master</module>
     <module>demo-requirejs-master</module>
+    <module>demo-jsoup-master</module>
   </modules>
   <dependencies>
     <dependency>
