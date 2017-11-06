@@ -29,6 +29,7 @@
     <module>demo-requirejs-master</module>
     <module>demo-jsoup-master</module>
     <module>demo-jdbc-master</module>
+    <module>demo-bootstrap-master</module>
   </modules>
   <dependencies>
     <dependency>

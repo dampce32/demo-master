@@ -16,7 +16,7 @@ public class JDBCTest {
 	@Test
 	public void testDbConn() {
 		String driverName="com.microsoft.sqlserver.jdbc.SQLServerDriver";
-		String dbURL="jdbc:sqlserver://192.168.0.2:7777;databaseName=STUMS-INSDEP";
+		String dbURL="jdbc:sqlserver://192.168.0.2:7777;databaseName=STUMS-CES";
 		String userName="lz";
 		String userPwd="Lz2017!@#";
 		try{
@@ -32,7 +32,7 @@ public class JDBCTest {
 	
 	@Test
 	public void testCreateInitDBSql() {
-		String sourceDB = "STUMS_INSDEP";
+		String sourceDB = "STUMS_CES";
 		
 		String driverName="com.microsoft.sqlserver.jdbc.SQLServerDriver";
 		String dbURL="jdbc:sqlserver://192.168.0.2:7777;databaseName="+sourceDB;
@@ -51,7 +51,7 @@ public class JDBCTest {
 	        StringBuilder sqlSb = new StringBuilder();
 	        DatabaseMetaData dbMetaData = conn.getMetaData();
 	        
-	        String tableName = "T_StuScholarshipEvaluationRate";
+	        String tableName = "T_Teacher";
 			ResultSet colRet = dbMetaData.getColumns(null,"%",tableName ,"%"); 
 			int i = 0;
 			while(colRet.next()) { 
