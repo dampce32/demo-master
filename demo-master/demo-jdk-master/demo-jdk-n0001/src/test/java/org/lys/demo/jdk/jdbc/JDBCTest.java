@@ -106,6 +106,82 @@ where b.schoolYearId is null ;
 	}
 	
 	
+	@Test
+	public void testCreateInitMySql() {
+		String sourceDB = "yiban-data";
+		
+		String driverName="com.mysql.jdbc.Driver";
+		String dbURL="jdbc:mysql://127.0.0.1:3306/"+sourceDB+"?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true";
+		String userName="root";
+		String userPwd="csit2012!@#";
+		try{
+			Class.forName(driverName);
+			Connection conn=DriverManager.getConnection(dbURL,userName,userPwd);
+			// 获取所有表名  
+	        Statement statement = conn.createStatement();  
+//	        getTables(conn);  
+	        StringBuilder insertColumnsSb = new StringBuilder();
+	        StringBuilder selectColumnsSb = new StringBuilder();
+	        StringBuilder pkColumnsSb = new StringBuilder();
+	        StringBuilder whereSb = new StringBuilder();
+	        StringBuilder sqlSb = new StringBuilder();
+	        DatabaseMetaData dbMetaData = conn.getMetaData();
+	        
+	        String tableName = "resources";
+			ResultSet colRet = dbMetaData.getColumns(null,"%",tableName ,"%"); 
+			int i = 0;
+			while(colRet.next()) { 
+				String columnName = colRet.getString("COLUMN_NAME");
+				if(i==0){
+					insertColumnsSb.append(columnName);
+					selectColumnsSb.append("a."+columnName);
+				}else{
+					insertColumnsSb.append(","+columnName);
+					selectColumnsSb.append(",");
+					if(i%8==0){
+						selectColumnsSb.append("\n    ");
+					}
+					selectColumnsSb.append("a."+columnName);
+				}
+				i++;
+			}
+			
+			ResultSet pkRSet = dbMetaData.getPrimaryKeys(null, null, tableName); 
+			while(pkRSet.next() ) { 
+				String pkColumn = pkRSet.getObject(4).toString();
+				pkColumnsSb.append("a.").append(pkColumn).append("=").append("b.").append(pkColumn);
+				
+				whereSb.append("b.").append(pkColumn).append(" is null");
+			}
+			sqlSb.append("insert into ").append(tableName).append("(").append(insertColumnsSb.toString()).append(")\n")
+			    .append("select ").append("\n")
+			    .append("    ").append(selectColumnsSb.toString()).append("\n")
+			    .append("from `").append(sourceDB).append("`.").append(tableName).append(" a\n")
+			    .append("left join ").append(tableName).append(" b on ").append(pkColumnsSb.toString()).append("\n")
+			    .append("where ").append(whereSb.toString()).append(";");
+				
+	        // 获取列名  
+	            
+	            
+	            /*
+	             insert into T_SchoolYear(schoolYearId,schoolYearName,array)
+select 
+	a.schoolYearId,a.schoolYearName,a.array
+from STUMS_INSDEP.dbo.T_SchoolYear	a
+left join T_SchoolYear b on a.schoolYearId = b.schoolYearId
+where b.schoolYearId is null ; 
+	             */
+	            
+	        System.out.println(sqlSb.toString());  
+	        statement.close();  
+	        conn.close();  
+		}catch(Exception e){
+		   e.printStackTrace();
+		   System.out.print("连接失败");
+		}     
+	}
+	
+	
 	
 	
 	@Test

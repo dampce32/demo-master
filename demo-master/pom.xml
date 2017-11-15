@@ -30,6 +30,7 @@
     <module>demo-jsoup-master</module>
     <module>demo-jdbc-master</module>
     <module>demo-bootstrap-master</module>
+    <module>demo-cxf-master</module>
   </modules>
   <dependencies>
     <dependency>
@@ -66,17 +67,12 @@
             <version>${logback.version}</version>
         </dependency>
   </dependencies>
-  <repositories>
-      <!-- 推荐使用oschina仓库 -->
-      <repository>
-          <id>nexus-osc</id>
-          <url>http://maven.oschina.net/content/groups/public/</url>
-      </repository>
-      <repository>
-          <id>nexus-osc-thirdparty</id>
-          <url>http://maven.oschina.net/content/repositories/thirdparty/</url>
-      </repository>
-  </repositories>
+   <repositories>
+        <repository>
+            <id>aliyunmaven</id>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
   <properties>
   	 <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.7</jdk.version>
