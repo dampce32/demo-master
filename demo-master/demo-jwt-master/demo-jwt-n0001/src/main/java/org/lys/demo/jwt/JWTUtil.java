@@ -46,10 +46,7 @@ public class JWTUtil {
 		if (issuedDate != null) {
 			builder.setIssuedAt(issuedDate);// 签发时间
 		}
-		if (issuedDate != null) {
-			builder.setExpiration(expireDate); // 设置过期时间
-		}
-		if (issuedDate != null) {
+		if (expireDate != null) {
 			builder.setExpiration(expireDate); // 设置过期时间
 		}
 		builder.signWith(SignatureAlgorithm.HS512, key);// 设置签名使用的签名算法和签名使用的秘钥
@@ -117,7 +114,8 @@ public class JWTUtil {
 	}
 
 	public static void main(String[] args) {
-		String token = "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE1NTMxMjMzNjQsInVpZCI6IjMzMzMiLCJpYXQiOjE1NTMwNjMzNjR9.s52EdId95odQoNoQkgreVb2Z9j3GGLswIavQK5BrAnZl01haFEjuihhTgf3IkMH7hRoZJ6ME0_ESBlhoeEo1nQ";
+		String token = JWTUtil.createToken("user");
+		System.out.println(token);
 		String uid = JWTUtil.getUid(token);
 		System.out.println(uid);
 		System.out.println(JWTUtil.getExpiration(token));
