@@ -33,6 +33,7 @@
     <module>demo-cxf-master</module>
     <module>demo-jwt-master</module>
     <module>demo-base64-master</module>
+    <module>demo-jobconverter-master</module>
   </modules>
   <dependencies>
     <dependency>
