@@ -8,3 +8,6 @@ spring:
       uri: http://localhost:8888/
 server:
   port: 8881
+management:
+  security:
+    enabled: false
