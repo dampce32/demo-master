@@ -35,6 +35,7 @@
     <module>demo-base64-master</module>
     <module>demo-jobconverter-master</module>
     <module>demo-spring-cloud-master</module>
+    <module>demo-ifc-master</module>
   </modules>
   <dependencies>
     <dependency>
