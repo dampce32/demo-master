@@ -36,6 +36,7 @@
     <module>demo-jobconverter-master</module>
     <module>demo-spring-cloud-master</module>
     <module>demo-ifc-master</module>
+    <module>demo-fastdfs</module>
   </modules>
   <dependencies>
     <dependency>
