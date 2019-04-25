@@ -27,6 +27,18 @@ public class Demo2 {
     @NotNull(message="级联对象不能为空")
     @Valid
     private Demo3 demo3;
+    
+    @Size(min=1)
+    @NotNull(message="List对象不能为空")
+    private List<@Valid Person> personList;
+
+	public List<Person> getPersonList() {
+		return personList;
+	}
+
+	public void setPersonList(List<Person> personList) {
+		this.personList = personList;
+	}
 
 	public String getLength() {
 		return length;

@@ -2,13 +2,14 @@ package top.linyisong.model;
 
 import javax.validation.GroupSequence;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 
 public class Person {
-    @NotBlank
+    @NotNull
     @Range(min = 1,max = Integer.MAX_VALUE,message = "必须大于0",groups = {GroupA.class})
     /**用户id*/
     private Integer userId;

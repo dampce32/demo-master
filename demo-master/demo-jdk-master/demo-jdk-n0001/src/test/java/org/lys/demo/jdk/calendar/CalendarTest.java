@@ -32,5 +32,9 @@ public class CalendarTest {
 		System.out.println(now.get(11));
 	}
 	
+	public void testLong(){
+		
+	}
+	
 
 }
