@@ -39,6 +39,7 @@
     <module>demo-fastdfs</module>
     <module>demo-lombok-master</module>
     <module>demo-liquibase-master</module>
+    <module>demo-elasticSearch-master</module>
   </modules>
   <dependencies>
     <dependency>
