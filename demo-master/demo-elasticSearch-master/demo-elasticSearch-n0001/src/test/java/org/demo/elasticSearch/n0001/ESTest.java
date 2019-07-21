@@ -13,15 +13,18 @@ import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.text.Text;
 import org.elasticsearch.common.transport.TransportAddress;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.junit.After;
 import org.junit.Before;
@@ -129,6 +132,40 @@ public class ESTest {
 		System.out.println(response.toString());
 		closeClient();
 	}
+	
+	@Test
+	public void testHighLight() throws Exception {
+		QueryBuilder matchQuery = QueryBuilders.matchQuery("title", "入门");
+        HighlightBuilder hiBuilder=new HighlightBuilder();
+        hiBuilder.preTags("<h2>");
+        hiBuilder.postTags("</h2>");
+        hiBuilder.field("title");
+
+     // 搜索数据
+        
+        SearchRequestBuilder searchRequestBuilder = client.prepareSearch("book").setTypes("novel") // 设置type
+                .setQuery(matchQuery)
+                .highlighter(hiBuilder);
+        System.out.println("查询json："+searchRequestBuilder);
+        SearchResponse response = searchRequestBuilder.execute().actionGet();
+        //获取查询结果集
+        SearchHits searchHits = response.getHits();
+        System.out.println("共搜到:"+searchHits.getTotalHits()+"条结果!");
+        //遍历结果
+        for(SearchHit hit:searchHits){
+            System.out.println("String方式打印文档搜索内容:");
+            System.out.println(hit.getSourceAsString());
+            System.out.println("Map方式打印高亮内容");
+            System.out.println(hit.getHighlightFields());
+ 
+            System.out.println("遍历高亮集合，打印高亮片段:");
+            Text[] text = hit.getHighlightFields().get("title").getFragments();
+            for (Text str : text) {
+                System.out.println(str.string());
+            }
+        }
+	}
+	
 
 	// 关闭客户端
 	@After
