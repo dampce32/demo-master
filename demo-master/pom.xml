@@ -40,6 +40,9 @@
     <module>demo-lombok-master</module>
     <module>demo-liquibase-master</module>
     <module>demo-elasticSearch-master</module>
+    <module>demo-qjs-master</module>
+    <module>demo-layui-master</module>
+    <module>demo-uniapp-master</module>
   </modules>
   <dependencies>
     <dependency>
