@@ -134,6 +134,30 @@ public class ESTest {
 	}
 	
 	@Test
+    public void testSearchArray() throws Exception {
+        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+        boolQuery.should(QueryBuilders.termQuery("roles", "role1"));
+        boolQuery.should(QueryBuilders.termQuery("roles", "role2"));
+        
+        SearchRequestBuilder searchRequestBuilder = client.prepareSearch("book")// 创建查询索引,参数productindex表示要查询的索引库为blog、index
+                .setTypes("lunatic") // 设置type
+                .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)// 设置查询类型 1.SearchType.DFS_QUERY_THEN_FETCH = 精确查询
+                                                                // 2.SearchType.SCAN =扫描查询,无序
+                .setQuery(boolQuery) // 设置查询项以及对应的值
+                .setFrom(0).setSize(10);// 设置分页;
+        
+        System.out.println(searchRequestBuilder);
+        SearchResponse response = searchRequestBuilder.get();
+        SearchHits hits = response.getHits();
+        System.out.println("总数：" + hits.getTotalHits());
+        for (SearchHit hit : hits.getHits()) {
+            System.out.println(hit.getSourceAsMap());
+        }
+        System.out.println(response.toString());
+        closeClient();
+    }
+	
+	@Test
 	public void testHighLight() throws Exception {
 		QueryBuilder matchQuery = QueryBuilders.matchQuery("title", "入门");
         HighlightBuilder hiBuilder=new HighlightBuilder();
