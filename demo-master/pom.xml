@@ -43,6 +43,8 @@
     <module>demo-qjs-master</module>
     <module>demo-layui-master</module>
     <module>demo-uniapp-master</module>
+    <module>demo-flowable-master</module>
+    <module>demo-oss-master</module>
   </modules>
   <dependencies>
     <dependency>

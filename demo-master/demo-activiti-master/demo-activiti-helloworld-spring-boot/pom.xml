@@ -1,0 +1,89 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>top.linyisong.activiti</groupId>
+  <artifactId>demo-activiti-helloworld-spring-boot</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  
+  <parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.0.5.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	  
+  <properties>
+  	<activiti.version>6.0.0</activiti.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.version>1.8</java.version>
+  </properties>
+  
+    <!-- Maven仓库定义 -->
+	<repositories>
+        <repository>
+            <id>central</id>
+            <url>http://maven.oschina.net/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>nexus-osc-thirdparty</id>
+            <url>http://maven.oschina.net/content/repositories/thirdparty/</url>
+        </repository>
+
+        <!-- Activiti的仓库 -->
+		<repository>
+			<id>Activiti</id>
+			<url>https://maven.alfresco.com/nexus/content/repositories/activiti</url>
+		</repository>
+
+		<repository>
+			<id>Alfresco</id>
+			<url>https://maven.alfresco.com/nexus/content/repositories/public</url>
+		</repository>
+
+		<!-- Mulesoft的仓库 -->
+		<repository>
+			<id>Mulesoft</id>
+			<url>https://repository-master.mulesoft.org/nexus/content/groups/public/</url>
+		</repository>
+	</repositories>
+	
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+  	<!-- activit begin -->
+	<dependency>
+		<groupId>org.activiti</groupId>
+		<artifactId>activiti-engine</artifactId>
+           <version>${activiti.version}</version>
+	</dependency>
+	<!-- 依赖Groovy，Activiti的Script Task为groovy时需要第三方的支持 -->
+	<dependency>
+		<groupId>org.codehaus.groovy</groupId>
+		<artifactId>groovy</artifactId>
+		<version>1.8.6</version>
+	</dependency>
+	<!-- 测试依赖-h2内置数据库 -->
+	<dependency>
+		<groupId>com.h2database</groupId>
+		<artifactId>h2</artifactId>
+		<version>1.3.172</version>
+		<scope>test</scope>
+	</dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.10</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <!-- 编译时一些插件依赖 -->
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+</project>
