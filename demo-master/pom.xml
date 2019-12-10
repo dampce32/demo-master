@@ -45,6 +45,7 @@
     <module>demo-uniapp-master</module>
     <module>demo-flowable-master</module>
     <module>demo-oss-master</module>
+    <module>demo-excel-master</module>
   </modules>
   <dependencies>
     <dependency>
@@ -80,6 +81,11 @@
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
         </dependency>
+        <dependency>
+		    <groupId>cn.hutool</groupId>
+		    <artifactId>hutool-all</artifactId>
+		    <version>5.0.7</version>
+		</dependency>
   </dependencies>
    <repositories>
         <repository>

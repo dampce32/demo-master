@@ -10,6 +10,8 @@ import org.bouncycastle.crypto.Digest;
 import org.bouncycastle.crypto.digests.SHA1Digest;
 import org.bouncycastle.crypto.digests.SHA224Digest;
 import org.junit.Test;
+
+import cn.hutool.crypto.digest.DigestUtil;
 /**
  * @description: 消息摘要算法SHA(安全散列算法)
  * 应用：
@@ -49,6 +51,11 @@ public class SHATest {
 		byte[] md5Bytes = new byte[digest.getDigestSize()];
 		digest.doFinal(md5Bytes, 0);
 		System.out.println(org.bouncycastle.util.encoders.Hex.toHexString(md5Bytes));
+	}
+	
+	@Test
+	public void testHuToolSHA256() throws IOException {
+		DigestUtil.sha256Hex("a123456");
 	}
 	
 	@Test

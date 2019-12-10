@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="crypto-js-3.1.9-1/crypto-js.js"></script>
+<script type="text/javascript" src="crypto-js-3.1.9-1/aes.js"></script>
+<script type="text/javascript" src="crypto-js-3.1.9-1/mode-ecb.js"></script>
+<script type="text/javascript">
+    function Encrypt(word){
+	// key 的原字符串是由 先md5加密之后再base64加密得到的字符串 所以这个需要先base64解密
+		 var key = CryptoJS.enc.Base64.parse("4QrcOUm6Wau+VuBX8g+IPg==");	
+		 var srcs = CryptoJS.enc.Utf8.parse(word);
+		 var encrypted = CryptoJS.AES.encrypt(srcs, key, {mode:CryptoJS.mode.ECB,padding: CryptoJS.pad.Pkcs7});
+		 return encrypted.toString();
+	}
+	function Decrypt(word){
+		 var key = CryptoJS.enc.Base64.parse("4QrcOUm6Wau+VuBX8g+IPg==");	
+ 
+		 var decrypt = CryptoJS.AES.decrypt(word, key, {mode:CryptoJS.mode.ECB,padding: CryptoJS.pad.Pkcs7});
+		 return CryptoJS.enc.Utf8.stringify(decrypt).toString();
+	}
+ 
+	var s = Encrypt("nihao")
+	alert("encode:"+s);//L0tG4V4gG5bvrk8HCxbPVw==
+	alert("decode:"+Decrypt(s));
+</script>
+</head>
+<body>
+
+</body>
+</html>
