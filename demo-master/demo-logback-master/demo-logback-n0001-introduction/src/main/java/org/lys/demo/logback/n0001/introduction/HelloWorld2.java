@@ -11,7 +11,7 @@ public class HelloWorld2 {
     Logger logger = LoggerFactory.getLogger("chapters.introduction.HelloWorld2");
     logger.debug("Hello world.");
 
-    // print internal state
+    // 打印内部的状态
     LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
     StatusPrinter.print(lc);
   }
