@@ -58,7 +58,7 @@
 	<dependency>
 		<groupId>org.codehaus.groovy</groupId>
 		<artifactId>groovy</artifactId>
-		<version>1.8.6</version>
+		<version>2.4.21</version>
 	</dependency>
 	<!-- 测试依赖-h2内置数据库 -->
 	<dependency>
